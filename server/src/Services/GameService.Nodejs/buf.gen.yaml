@@ -1,0 +1,8 @@
+version: v2
+inputs:
+  - directory: proto
+plugins:
+  - local: ['pnpm', 'exec', 'protoc-gen-es']
+    out: src/gen/proto
+    opt:
+      - target=ts
