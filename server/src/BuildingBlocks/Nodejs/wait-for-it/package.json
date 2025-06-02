@@ -1,0 +1,11 @@
+{
+  "name": "wait-for-it",
+  "version": "0.0.0",
+  "bin": {
+    "wait-for-it": "./wait-for-it.sh"
+  },
+  "scripts": {
+    "postinstall": "curl -sSL https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -o wait-for-it.sh && chmod +x wait-for-it.sh"
+  },
+  "private": true
+}
