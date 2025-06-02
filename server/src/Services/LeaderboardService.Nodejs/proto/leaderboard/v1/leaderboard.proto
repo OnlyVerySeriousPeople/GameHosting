@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package leaderboard.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+service LeaderboardService {
+  rpc GetLeaderboard(GetLeaderboardRequest) returns (GetLeaderboardResponse);
+  rpc UpdatePlayerStats(UpdatePlayerStatsRequest) returns (UpdatePlayerStatsResponse);
+  rpc GetPlayerStats(GetPlayerStatsRequest) returns (GetPlayerStatsResponse);
+}
+
+message LeaderboardEntryData {
+  uint32 score = 1;
+  google.protobuf.Struct custom = 2;
+}
+
+message LeaderboardEntry {
+  string game_id = 1;
+  string player_id = 2;
+  google.protobuf.Timestamp last_updated_at = 3;
+  LeaderboardEntryData data = 4;
+}
+
+message GetLeaderboardRequest {
+  string game_id = 1;
+  uint32 entry_limit = 2;
+  optional uint32 score_cursor = 3;
+}
+
+message GetLeaderboardResponse {
+  bool exists = 1;
+  repeated LeaderboardEntry entries = 2;
+  optional uint32 next_score_cursor = 3;
+}
+
+message UpdatePlayerStatsRequest {
+  string game_id = 1;
+  string player_id = 2;
+  LeaderboardEntryData data = 3;
+}
+
+message UpdatePlayerStatsResponse {
+  bool ok = 1;
+}
+
+message GetPlayerStatsRequest {
+  string player_id = 1;
+}
+
+message GetPlayerStatsResponse {
+  repeated LeaderboardEntry entries = 1;
+}
