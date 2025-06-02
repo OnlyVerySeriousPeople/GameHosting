@@ -1,9 +1,10 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "target": "ESNext",
-    "lib": ["ESNext", "DOM"],
+    "module": "Node18",
+    "target": "ES2024",
+    "lib": ["ES2023", "DOM"],
+    "esModuleInterop": true,
     "strict": true,
     "rootDir": "src",
     "outDir": "build"

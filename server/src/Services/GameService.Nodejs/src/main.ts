@@ -1,4 +1,4 @@
-import {DB, GameCategory} from './gen/kysely';
+import {DB, GameCategory} from './gen/kysely/index';
 import {
   GameService,
   GetGameCategoriesRequest,
