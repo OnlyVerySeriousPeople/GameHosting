@@ -2,7 +2,7 @@
   "name": "game-service",
   "version": "0.0.0",
   "scripts": {
-    "db:wait": "dotenvx run -- sh -c 'wait-on --timeout 60 tcp:$DATABASE_HOST:$DATABASE_PORT'",
+    "db:wait": "dotenvx run -- sh -c 'wait-on --timeout 60 tcp:$DB_HOST:$DB_PORT'",
     "db:migrate": "dotenvx run -- kysely migrate latest",
     "gen": "buf generate && dotenvx run -- kysely-codegen",
     "build": "tsc",
