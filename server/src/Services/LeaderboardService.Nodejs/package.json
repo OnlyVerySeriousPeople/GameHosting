@@ -2,7 +2,7 @@
   "name": "leaderboard-service",
   "version": "0.0.0",
   "scripts": {
-    "db:wait": "dotenvx run -- ./wait-for-db.sh",
+    "db:wait": "dotenvx run -- sh -c 'wait-on --timeout 60 tcp:$DB_HOST:$DB_PORT'",
     "gen": "buf generate",
     "build": "tsc",
     "serve": "dotenvx run -- node ./build/main.js",
@@ -19,7 +19,8 @@
     "@connectrpc/connect-fastify": "^2.0.2",
     "@dotenvx/dotenvx": "^1.44.1",
     "fastify": "^5.3.3",
-    "mongoose": "^8.15.1"
+    "mongoose": "^8.15.1",
+    "wait-on": "^8.0.3"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.54.0",
