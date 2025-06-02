@@ -7,7 +7,7 @@ const KYSELY_FOLDER = 'kysely';
 export default defineConfig({
   dialect: 'pg',
   dialectConfig: {
-    pool: new Pool({connectionString: process.env.DATABASE_URL}),
+    pool: new Pool({connectionString: process.env.DB_URL}),
   },
   migrations: {
     migrationFolder: path.join(KYSELY_FOLDER, 'migrations'),

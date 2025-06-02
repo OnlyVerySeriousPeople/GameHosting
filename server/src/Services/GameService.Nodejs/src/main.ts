@@ -9,7 +9,7 @@ import {Pool} from 'pg';
 import {env} from 'process';
 import {fastifyConnectPlugin} from '@connectrpc/connect-fastify';
 
-const pool = new Pool({connectionString: process.env.DATABASE_URL});
+const pool = new Pool({connectionString: process.env.DB_URL});
 const db = new Kysely<DB>({dialect: new PostgresDialect({pool})});
 
 const gameService = {
