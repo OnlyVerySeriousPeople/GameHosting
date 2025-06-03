@@ -11,6 +11,8 @@ const leaderboardShema = new Schema(
     timestamps: {createdAt: false, updatedAt: 'lastUpdatedAt'},
   },
 );
-type LeaderboardShema = InferSchemaType<typeof leaderboardShema>;
+type LeaderboardShema = InferSchemaType<typeof leaderboardShema> & {
+  lastUpdatedAt: Date;
+};
 
 export {leaderboardShema, LeaderboardShema};
