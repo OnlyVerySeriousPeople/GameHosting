@@ -1,0 +1,16 @@
+import {InferSchemaType, Schema, SchemaTypes} from 'mongoose';
+
+const leaderboardShema = new Schema(
+  {
+    gameId: {type: String, required: true},
+    playerId: {type: String, required: true},
+    score: {type: Number, required: true},
+    custom: {type: SchemaTypes.Mixed},
+  },
+  {
+    timestamps: {createdAt: false, updatedAt: 'lastUpdatedAt'},
+  },
+);
+type LeaderboardShema = InferSchemaType<typeof leaderboardShema>;
+
+export {leaderboardShema, LeaderboardShema};
