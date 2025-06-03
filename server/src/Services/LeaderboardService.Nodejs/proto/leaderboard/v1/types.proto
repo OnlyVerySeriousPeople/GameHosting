@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package leaderboard.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+message Stats {
+  uint32 score = 1;
+  google.protobuf.Struct custom = 2;
+}
+
+message Entry {
+  google.protobuf.Timestamp last_updated_at = 1;
+  Stats stats = 2;
+}
+
+message PlayerStatsEntry {
+  string game_id = 1;
+  Entry entry = 2;
+}
+
+message LeaderboardEntry {
+  string player_id = 1;
+  Entry entry = 2;
+}
