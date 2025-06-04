@@ -1,8 +1,6 @@
-import {Timestamp} from '@bufbuild/protobuf/wkt';
+import {Timestamp} from '../dtos/types';
 
-export function dateToTimestamp(
-  date: Date,
-): Pick<Timestamp, 'seconds' | 'nanos'> {
+export function dateToTimestamp(date: Date): Timestamp {
   const ms = date.getTime();
   return {
     seconds: BigInt(Math.floor(ms / 1000)),
