@@ -1,4 +1,4 @@
-import {FilterQuery, Mixed, Model, model} from 'mongoose';
+import {FilterQuery, Model, model} from 'mongoose';
 import {LeaderboardShema, leaderboardShema} from '../schemas/leaderboard';
 
 export class LeaderboardModel {
@@ -40,13 +40,13 @@ export class LeaderboardModel {
     gameId: string,
     playerId: string,
     newScore: number,
-    newCustom: Mixed,
+    newCustom?: Object,
   ) {
     await this.model.findOneAndUpdate(
       {gameId, playerId},
       {
         $max: {score: newScore},
-        $set: {custom: newCustom},
+        $set: newCustom ? {custom: newCustom} : undefined,
       },
       {upsert: true, new: true},
     );
