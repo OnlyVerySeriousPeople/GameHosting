@@ -1,35 +1,48 @@
+import {Fn} from './types';
+
 export function methodDecoratorFactory(
-  decorator: (...args: unknown[]) => unknown,
-  mode?: 'pipe' | 'compose' | 'catch',
+  decorator: Fn,
+  mode?: 'after' | 'pipe' | 'compose' | 'catch',
 ): MethodDecorator {
   return (_target, _propertyKey, descriptor: PropertyDescriptor) => {
-    const originalMethod = descriptor.value;
+    const originalMethod = descriptor.value as Fn;
+    if (typeof originalMethod !== 'function') {
+      throw new Error(
+        `${methodDecoratorFactory.name} can be applied only to methods`,
+      );
+    }
 
-    const wrappedMethod = function (this: unknown, ...args: unknown[]) {
+    const wrappedMethod = async function (this: unknown, ...args: unknown[]) {
+      const callOriginal = (finalArgs: unknown[]) =>
+        originalMethod.apply(this, finalArgs);
+
       switch (mode) {
+        case 'after': {
+          const res = await callOriginal(args);
+          await decorator(res, ...args);
+          return res;
+        }
         case 'pipe': {
-          const newArgs = decorator(...args);
+          const newArgs = await decorator(...args);
           if (!Array.isArray(newArgs)) {
-            throw new Error(
-              "decorator must return an array when 'pipe' is true",
-            );
+            throw new Error("decorator must return an array in 'pipe' mode");
           }
-          return originalMethod.apply(this, newArgs);
+          return callOriginal(newArgs);
         }
         case 'compose': {
-          const res = originalMethod.apply(this, args);
-          return decorator(res);
+          const res = await callOriginal(args);
+          return decorator(res, ...args);
         }
         case 'catch': {
           try {
-            return originalMethod.apply(this, args);
+            return await callOriginal(args);
           } catch (err) {
-            return decorator(err, args);
+            return decorator(err, ...args);
           }
         }
         default: {
-          decorator(...args);
-          return originalMethod.apply(this, args);
+          await decorator(...args);
+          return callOriginal(args);
         }
       }
     };

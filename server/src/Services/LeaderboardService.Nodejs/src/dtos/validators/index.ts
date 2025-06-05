@@ -11,6 +11,6 @@ export const check = <T extends InputData>(...rules: Validator<T>[]) =>
       throw new RequestError('input data must be a plain object');
     }
     for (const rule of rules) rule(data as T);
-  }, 'pipe');
+  });
 
 export {greaterThanZero, nonEmptyStr, plainObj};

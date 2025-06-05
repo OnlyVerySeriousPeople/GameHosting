@@ -1,3 +1,5 @@
+import {Fn} from './types';
+
 export function paramDecoratorFactory(
   decorator: (arg: unknown) => unknown,
   mode?: 'pipe',
@@ -7,12 +9,13 @@ export function paramDecoratorFactory(
     propertyKey: string | symbol | undefined,
     parameterIndex: number,
   ) => {
-    if (propertyKey === undefined) {
-      throw new Error('Unexpected decorator error.');
-    }
+    if (propertyKey === undefined) throw new Error('invalid property key');
 
     const descriptor = Object.getOwnPropertyDescriptor(target, propertyKey);
-    const originalMethod = descriptor?.value;
+    const originalMethod = descriptor?.value as Fn;
+    if (typeof originalMethod !== 'function') {
+      throw new Error('property descriptor value must be a method');
+    }
 
     const wrappedMethod = function (this: unknown, ...args: unknown[]) {
       const param = args[parameterIndex];

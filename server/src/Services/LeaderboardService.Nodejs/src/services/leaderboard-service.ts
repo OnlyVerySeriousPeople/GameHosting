@@ -15,8 +15,10 @@ import {
 } from '../dtos/validators';
 import {db} from '../db';
 import {handleError} from './utils/handle-error';
+import {logEndpoint} from './utils/log-endpoint';
 
 export class LeaderboardService {
+  @logEndpoint('GetLeaderboard')
   @handleError('cannot get leaderboard of this game')
   async getLeaderboard(
     @check<GetLeaderboardReq>(
@@ -38,6 +40,7 @@ export class LeaderboardService {
     };
   }
 
+  @logEndpoint('DeleteLeaderboard')
   @handleError('cannot delete leaderboard of this game')
   async deleteLeaderboard(
     @check<DeleteLeaderboardReq>(nonEmptyStr('gameId'))
@@ -48,6 +51,7 @@ export class LeaderboardService {
     return {ok: true};
   }
 
+  @logEndpoint('UpdatePlayerStats')
   @handleError('cannot update stats of this player for this game')
   async updatePlayerStats(
     @check<UpdatePlayerStatsReq>(
@@ -67,6 +71,7 @@ export class LeaderboardService {
     return {ok: true};
   }
 
+  @logEndpoint('GetPlayerStats')
   @handleError('cannot get stats of this player for this game')
   async getPlayerStats(
     @check<GetPlayerStatsReq>(nonEmptyStr('gameId', 'playerId'))
@@ -79,6 +84,7 @@ export class LeaderboardService {
     };
   }
 
+  @logEndpoint('GetAllPlayerStats')
   @handleError('cannot get stats of this player')
   async getAllPlayerStats(
     @check<GetAllPlayerStatsReq>(nonEmptyStr('playerId'))
@@ -91,6 +97,7 @@ export class LeaderboardService {
     };
   }
 
+  @logEndpoint('DeleteAllPlayerStats')
   @handleError('cannot detete stats of this player')
   async deleteAllPlayerStats(
     @check<DeleteAllPlayerStatsReq>(nonEmptyStr('playerId'))
