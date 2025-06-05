@@ -1,5 +1,15 @@
+import {InputData, Validator} from './types';
+import {isPlainObj, plainObj} from './plain-obj';
 import {greaterThanZero} from './greater-than-zero';
 import {nonEmptyStr} from './non-empty-str';
-import {nonNullObj} from './non-null-obj';
+import {paramDecoratorFactory} from '../../utils/param-decorator-factory';
 
-export {greaterThanZero, nonNullObj, nonEmptyStr};
+export const check = <T extends InputData>(...rules: Validator<T>[]) =>
+  paramDecoratorFactory(data => {
+    if (!isPlainObj(data)) {
+      throw new Error('Input data must be a plain object.');
+    }
+    for (const rule of rules) rule(data as T);
+  }, false);
+
+export {greaterThanZero, nonEmptyStr, plainObj};

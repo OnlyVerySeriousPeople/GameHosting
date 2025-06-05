@@ -7,13 +7,22 @@ import {
   GetPlayerStatsReq,
   UpdatePlayerStatsReq,
 } from '../dtos/leaderboard/requests';
-import {greaterThanZero, nonEmptyStr, nonNullObj} from '../dtos/validators';
+import {
+  check,
+  greaterThanZero,
+  nonEmptyStr,
+  plainObj,
+} from '../dtos/validators';
 import {db} from '../db';
 
 export class LeaderboardService {
-  @nonEmptyStr<GetLeaderboardReq>('gameId')
-  @greaterThanZero<GetLeaderboardReq>('entryLimit')
-  async getLeaderboard({gameId, entryLimit, scoreCursor}: GetLeaderboardReq) {
+  async getLeaderboard(
+    @check<GetLeaderboardReq>(
+      nonEmptyStr('gameId'),
+      greaterThanZero('entryLimit'),
+    )
+    {gameId, entryLimit, scoreCursor}: GetLeaderboardReq,
+  ) {
     const {leaderboard} = await db();
     const {entries, nextScoreCursor} = await leaderboard.getLeaderboard(
       gameId,
@@ -29,18 +38,22 @@ export class LeaderboardService {
     };
   }
 
-  @nonEmptyStr<DeleteLeaderboardReq>('gameId')
-  async deleteLeaderboard({gameId}: DeleteLeaderboardReq) {
+  async deleteLeaderboard(
+    @check<DeleteLeaderboardReq>(nonEmptyStr('gameId'))
+    {gameId}: DeleteLeaderboardReq,
+  ) {
     const {leaderboard} = await db();
     await leaderboard.deleteLeaderboard(gameId);
     return {ok: true};
   }
 
-  @nonEmptyStr<UpdatePlayerStatsReq>('gameId', 'playerId')
-  @nonNullObj<UpdatePlayerStatsReq>('stats')
-  async updatePlayerStats(req: UpdatePlayerStatsReq) {
-    const {gameId, playerId, stats} = req;
-
+  async updatePlayerStats(
+    @check<UpdatePlayerStatsReq>(
+      nonEmptyStr('gameId', 'playerId'),
+      plainObj('stats'),
+    )
+    {gameId, playerId, stats}: UpdatePlayerStatsReq,
+  ) {
     const {leaderboard} = await db();
     await leaderboard.updatePlayerStats(
       gameId,
@@ -52,8 +65,10 @@ export class LeaderboardService {
     return {ok: true};
   }
 
-  @nonEmptyStr<GetPlayerStatsReq>('gameId', 'playerId')
-  async getPlayerStats({gameId, playerId}: GetPlayerStatsReq) {
+  async getPlayerStats(
+    @check<GetPlayerStatsReq>(nonEmptyStr('gameId', 'playerId'))
+    {gameId, playerId}: GetPlayerStatsReq,
+  ) {
     const {leaderboard} = await db();
     const entry = await leaderboard.getPlayerStats(gameId, playerId);
     return {
@@ -61,8 +76,10 @@ export class LeaderboardService {
     };
   }
 
-  @nonEmptyStr<GetAllPlayerStatsReq>('playerId')
-  async getAllPlayerStats({playerId}: GetAllPlayerStatsReq) {
+  async getAllPlayerStats(
+    @check<GetAllPlayerStatsReq>(nonEmptyStr('playerId'))
+    {playerId}: GetAllPlayerStatsReq,
+  ) {
     const {leaderboard} = await db();
     const entries = await leaderboard.getAllPlayerStats(playerId);
     return {
@@ -70,8 +87,10 @@ export class LeaderboardService {
     };
   }
 
-  @nonEmptyStr<DeleteAllPlayerStatsReq>('playerId')
-  async deleteAllPlayerStats({playerId}: DeleteAllPlayerStatsReq) {
+  async deleteAllPlayerStats(
+    @check<DeleteAllPlayerStatsReq>(nonEmptyStr('playerId'))
+    {playerId}: DeleteAllPlayerStatsReq,
+  ) {
     const {leaderboard} = await db();
     await leaderboard.deleteAllPlayerStats(playerId);
     return {ok: true};

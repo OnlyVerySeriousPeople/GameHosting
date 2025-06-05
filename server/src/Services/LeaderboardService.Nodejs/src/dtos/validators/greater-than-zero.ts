@@ -1,17 +1,18 @@
-import {InputData, validatorFactory} from './utils/validator-factory';
+import {InputData, Predicate, Validator} from './types';
 
-export const greaterThanZero = <T extends InputData>(...keys: (keyof T)[]) =>
-  validatorFactory((data: T) => {
+export const isGreaterThanZero: Predicate = value =>
+  (typeof value === 'number' || typeof value === 'bigint') && value > 0;
+
+export function greaterThanZero<T extends InputData>(
+  ...keys: (keyof T)[]
+): Validator<T> {
+  return data => {
     for (const key of keys) {
-      const value = data[key] as unknown;
-      if (typeof value !== 'number' && typeof value !== 'bigint') {
-        throw new Error(
-          `Property "${String(key)}" must be a number or bigint.`,
-        );
-      }
-      if (value <= 0)
+      if (!isGreaterThanZero(data[key])) {
         throw new Error(
           `Property "${String(key)}" must be a number or bigint greater than zero.`,
         );
+      }
     }
-  });
+  };
+}
