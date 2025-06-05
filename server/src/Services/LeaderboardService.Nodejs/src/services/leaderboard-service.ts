@@ -13,11 +13,18 @@ import {
   nonEmptyStr,
   plainObj,
 } from '../dtos/validators';
-import {db} from '../db';
+import {Database} from '../db';
+import {LeaderboardModel} from '../db/models/leaderboard';
 import {handleError} from './utils/handle-error';
 import {logEndpoint} from './utils/log-endpoint';
 
 export class LeaderboardService {
+  private readonly model: LeaderboardModel;
+
+  constructor({leaderboard}: Database) {
+    this.model = leaderboard;
+  }
+
   @logEndpoint('GetLeaderboard')
   @handleError('cannot get leaderboard of this game')
   async getLeaderboard(
@@ -27,8 +34,7 @@ export class LeaderboardService {
     )
     {gameId, entryLimit, scoreCursor}: GetLeaderboardReq,
   ) {
-    const {leaderboard} = await db();
-    const {entries, nextScoreCursor} = await leaderboard.getLeaderboard(
+    const {entries, nextScoreCursor} = await this.model.getLeaderboard(
       gameId,
       entryLimit,
       scoreCursor,
@@ -46,8 +52,7 @@ export class LeaderboardService {
     @check<DeleteLeaderboardReq>(nonEmptyStr('gameId'))
     {gameId}: DeleteLeaderboardReq,
   ) {
-    const {leaderboard} = await db();
-    await leaderboard.deleteLeaderboard(gameId);
+    await this.model.deleteLeaderboard(gameId);
     return {ok: true};
   }
 
@@ -60,8 +65,7 @@ export class LeaderboardService {
     )
     {gameId, playerId, stats}: UpdatePlayerStatsReq,
   ) {
-    const {leaderboard} = await db();
-    await leaderboard.updatePlayerStats(
+    await this.model.updatePlayerStats(
       gameId,
       playerId,
       stats!.score,
@@ -77,8 +81,7 @@ export class LeaderboardService {
     @check<GetPlayerStatsReq>(nonEmptyStr('gameId', 'playerId'))
     {gameId, playerId}: GetPlayerStatsReq,
   ) {
-    const {leaderboard} = await db();
-    const entry = await leaderboard.getPlayerStats(gameId, playerId);
+    const entry = await this.model.getPlayerStats(gameId, playerId);
     return {
       entry: dtos.entry(entry),
     };
@@ -90,8 +93,7 @@ export class LeaderboardService {
     @check<GetAllPlayerStatsReq>(nonEmptyStr('playerId'))
     {playerId}: GetAllPlayerStatsReq,
   ) {
-    const {leaderboard} = await db();
-    const entries = await leaderboard.getAllPlayerStats(playerId);
+    const entries = await this.model.getAllPlayerStats(playerId);
     return {
       entries: entries.map(entry => dtos.playerStatsEntry(entry)),
     };
@@ -103,8 +105,7 @@ export class LeaderboardService {
     @check<DeleteAllPlayerStatsReq>(nonEmptyStr('playerId'))
     {playerId}: DeleteAllPlayerStatsReq,
   ) {
-    const {leaderboard} = await db();
-    await leaderboard.deleteAllPlayerStats(playerId);
+    await this.model.deleteAllPlayerStats(playerId);
     return {ok: true};
   }
 }

@@ -1,9 +1,11 @@
 import {ConnectOptions, connect} from 'mongoose';
 import {LeaderboardModel} from './models/leaderboard';
 
-let models: {leaderboard: LeaderboardModel} | undefined;
+export type Database = {leaderboard: LeaderboardModel};
 
-export const db = async () => {
+let models: Database | undefined;
+
+export const connectToDb = async () => {
   if (models) return models;
 
   try {
