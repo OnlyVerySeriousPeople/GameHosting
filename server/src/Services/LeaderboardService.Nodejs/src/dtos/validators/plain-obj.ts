@@ -1,4 +1,5 @@
 import {InputData, Predicate, Validator} from './types';
+import {RequestError} from '../../errors';
 
 export const isPlainObj: Predicate = value =>
   typeof value === 'object' &&
@@ -11,7 +12,7 @@ export function plainObj<T extends InputData>(
   return data => {
     for (const key of keys) {
       if (!isPlainObj(data[key])) {
-        throw new Error(`Field ${String(key)} must be a plain object.`);
+        throw new RequestError(`field ${String(key)} must be a plain object`);
       }
     }
   };

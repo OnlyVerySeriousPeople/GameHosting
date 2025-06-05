@@ -1,4 +1,5 @@
 import {InputData, Predicate, Validator} from './types';
+import {RequestError} from '../../errors';
 
 export const isNonEmptyStr: Predicate = value =>
   typeof value === 'string' && value !== '';
@@ -9,7 +10,9 @@ export function nonEmptyStr<T extends InputData>(
   return data => {
     for (const key of keys) {
       if (!isNonEmptyStr(data[key])) {
-        throw new Error(`Field ${String(key)} must be a non-empty string.`);
+        throw new RequestError(
+          `field ${String(key)} must be a non-empty string`,
+        );
       }
     }
   };

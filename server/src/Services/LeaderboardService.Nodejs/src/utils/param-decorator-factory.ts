@@ -1,6 +1,6 @@
 export function paramDecoratorFactory(
   decorator: (arg: unknown) => unknown,
-  pipe: boolean,
+  mode?: 'pipe',
 ): ParameterDecorator {
   return (
     target: Object,
@@ -16,9 +16,8 @@ export function paramDecoratorFactory(
 
     const wrappedMethod = function (this: unknown, ...args: unknown[]) {
       const param = args[parameterIndex];
-      args[parameterIndex] = pipe
-        ? decorator(param)
-        : (decorator(param), param);
+      args[parameterIndex] =
+        mode === 'pipe' ? decorator(param) : (decorator(param), param);
       return originalMethod.apply(this, args);
     };
 

@@ -14,8 +14,10 @@ import {
   plainObj,
 } from '../dtos/validators';
 import {db} from '../db';
+import {handleError} from './utils/handle-error';
 
 export class LeaderboardService {
+  @handleError('cannot get leaderboard of this game')
   async getLeaderboard(
     @check<GetLeaderboardReq>(
       nonEmptyStr('gameId'),
@@ -30,14 +32,13 @@ export class LeaderboardService {
       scoreCursor,
     );
 
-    console.log(entries);
-
     return {
       entries: entries.map(entry => dtos.leaderboardEntry(entry)),
       nextScoreCursor,
     };
   }
 
+  @handleError('cannot delete leaderboard of this game')
   async deleteLeaderboard(
     @check<DeleteLeaderboardReq>(nonEmptyStr('gameId'))
     {gameId}: DeleteLeaderboardReq,
@@ -47,6 +48,7 @@ export class LeaderboardService {
     return {ok: true};
   }
 
+  @handleError('cannot update stats of this player for this game')
   async updatePlayerStats(
     @check<UpdatePlayerStatsReq>(
       nonEmptyStr('gameId', 'playerId'),
@@ -65,6 +67,7 @@ export class LeaderboardService {
     return {ok: true};
   }
 
+  @handleError('cannot get stats of this player for this game')
   async getPlayerStats(
     @check<GetPlayerStatsReq>(nonEmptyStr('gameId', 'playerId'))
     {gameId, playerId}: GetPlayerStatsReq,
@@ -76,6 +79,7 @@ export class LeaderboardService {
     };
   }
 
+  @handleError('cannot get stats of this player')
   async getAllPlayerStats(
     @check<GetAllPlayerStatsReq>(nonEmptyStr('playerId'))
     {playerId}: GetAllPlayerStatsReq,
@@ -87,6 +91,7 @@ export class LeaderboardService {
     };
   }
 
+  @handleError('cannot detete stats of this player')
   async deleteAllPlayerStats(
     @check<DeleteAllPlayerStatsReq>(nonEmptyStr('playerId'))
     {playerId}: DeleteAllPlayerStatsReq,
