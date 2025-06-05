@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AuthService.Dotnet.Infrastructure\AuthService.Dotnet.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
