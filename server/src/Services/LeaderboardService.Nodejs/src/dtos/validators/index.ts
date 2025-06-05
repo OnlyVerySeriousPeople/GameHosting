@@ -1,9 +1,9 @@
 import {InputData, Validator} from './types';
-import {isPlainObj, plainObj} from './plain-obj';
+import {isPlainObj, plainObj} from './plain_obj';
 import {RequestError} from '../../errors';
-import {greaterThanZero} from './greater-than-zero';
-import {nonEmptyStr} from './non-empty-str';
-import {paramDecoratorFactory} from '../../utils/param-decorator-factory';
+import {greaterThanZero} from './greater_than_zero';
+import {nonEmptyStr} from './non_empty_str';
+import {paramDecoratorFactory} from '../../utils/param_decorator_factory';
 
 export const check = <T extends InputData>(...rules: Validator<T>[]) =>
   paramDecoratorFactory(data => {

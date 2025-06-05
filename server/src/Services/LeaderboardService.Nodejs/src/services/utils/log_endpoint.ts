@@ -1,5 +1,5 @@
 import {logger} from '../../utils/logger';
-import {methodDecoratorFactory} from '../../utils/method-decorator-factory';
+import {methodDecoratorFactory} from '../../utils/method_decorator_factory';
 
 export const logEndpoint = (endpointName?: string) =>
   methodDecoratorFactory((...args: unknown[]) => {

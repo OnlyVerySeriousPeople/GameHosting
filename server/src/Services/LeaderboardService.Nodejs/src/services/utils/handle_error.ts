@@ -1,7 +1,7 @@
 import {Code, ConnectError} from '@connectrpc/connect';
 import {DatabaseError, InternalError, RequestError} from '../../errors';
 import {logger} from '../../utils/logger';
-import {methodDecoratorFactory} from '../../utils/method-decorator-factory';
+import {methodDecoratorFactory} from '../../utils/method_decorator_factory';
 
 export const handleError = (desc?: string) =>
   methodDecoratorFactory((err: unknown) => {

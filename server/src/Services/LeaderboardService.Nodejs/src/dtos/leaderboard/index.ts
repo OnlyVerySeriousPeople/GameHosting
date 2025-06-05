@@ -1,6 +1,6 @@
 import {Entry, FullEntry, LeaderboardEntry, PlayerStatsEntry} from './types';
 import {LeaderboardShema} from '../../db/schemas/leaderboard';
-import {dateToTimestamp} from '../../utils/date-to-timestamp';
+import {dateToTimestamp} from '../../utils/date_to_timestamp';
 
 function fullEntry(data: LeaderboardShema): FullEntry {
   const {gameId, playerId, score, custom, lastUpdatedAt} = data;

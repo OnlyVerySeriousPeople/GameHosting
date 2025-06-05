@@ -1,4 +1,4 @@
-import {InternalError} from './internal-error';
+import {InternalError} from './internal_error';
 
 export class RequestError extends InternalError {
   override name = 'RequestError';

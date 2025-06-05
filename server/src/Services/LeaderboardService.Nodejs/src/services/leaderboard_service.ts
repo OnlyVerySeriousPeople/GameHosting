@@ -15,8 +15,8 @@ import {
 } from '../dtos/validators';
 import {Database} from '../db';
 import {LeaderboardModel} from '../db/models/leaderboard';
-import {handleError} from './utils/handle-error';
-import {logEndpoint} from './utils/log-endpoint';
+import {handleError} from './utils/handle_error';
+import {logEndpoint} from './utils/log_endpoint';
 
 export class LeaderboardService {
   private readonly model: LeaderboardModel;
