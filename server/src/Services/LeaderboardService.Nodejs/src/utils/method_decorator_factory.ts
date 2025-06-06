@@ -1,20 +1,18 @@
-import {Fn} from './types';
+type Mode = 'after' | 'pipe' | 'compose' | 'catch';
 
-export function methodDecoratorFactory(
-  decorator: Fn,
-  mode?: 'after' | 'pipe' | 'compose' | 'catch',
-): MethodDecorator {
-  return (_target, _propertyKey, descriptor: PropertyDescriptor) => {
-    const originalMethod = descriptor.value as Fn;
-    if (typeof originalMethod !== 'function') {
+export const methodDecoratorFactory =
+  (decorator: (...args: unknown[]) => unknown, mode?: Mode): MethodDecorator =>
+  (_target, _propertyKey, descriptor: PropertyDescriptor) => {
+    const original = descriptor.value as Function;
+    if (typeof original !== 'function') {
       throw new Error(
         `${methodDecoratorFactory.name} can be applied only to methods`,
       );
     }
 
-    const wrappedMethod = async function (this: unknown, ...args: unknown[]) {
+    const wrapped = async function (this: unknown, ...args: unknown[]) {
       const callOriginal = (finalArgs: unknown[]) =>
-        originalMethod.apply(this, finalArgs);
+        original.apply(this, finalArgs);
 
       switch (mode) {
         case 'after': {
@@ -47,7 +45,6 @@ export function methodDecoratorFactory(
       }
     };
 
-    descriptor.value = wrappedMethod;
+    descriptor.value = wrapped;
     return descriptor;
   };
-}

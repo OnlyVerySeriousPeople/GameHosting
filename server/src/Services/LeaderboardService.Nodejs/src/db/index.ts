@@ -1,29 +1,29 @@
-import {ConnectOptions, connect} from 'mongoose';
+import {DatabaseError} from '../errors';
 import {LeaderboardModel} from './models/leaderboard';
+import {LeaderboardShema} from './schemas/leaderboard';
+import {connect} from 'mongoose';
 
-export type Database = {leaderboard: LeaderboardModel};
+type Database = {leaderboard: LeaderboardModel};
 
 let models: Database | undefined;
 
-export const connectToDb = async () => {
+const connectToDatabase = async () => {
   if (models) return models;
 
   try {
     const url = process.env.DB_URL;
-    if (!url) throw Error('No MongoDB URL provided.');
+    if (!url) throw new DatabaseError('no MongoDB URL provided');
 
-    await connect(url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as ConnectOptions);
-
+    await connect(url);
     models = {
       leaderboard: new LeaderboardModel(),
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    throw new Error(`Cannot connect to the database. ${message}`);
+    throw new DatabaseError(`cannot connect to the database (${message})`);
   }
 
   return models;
 };
+
+export {connectToDatabase, Database, LeaderboardShema, LeaderboardModel};

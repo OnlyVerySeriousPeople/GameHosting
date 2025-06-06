@@ -1,29 +1,35 @@
-import {Entry, FullEntry, LeaderboardEntry, PlayerStatsEntry} from './types';
-import {LeaderboardShema} from '../../db/schemas/leaderboard';
-import {dateToTimestamp} from '../../utils/date_to_timestamp';
+import * as pb from '../../gen/proto/leaderboard/v1/types_pb';
+import {LeaderboardShema} from '../../db';
+import {create} from '@bufbuild/protobuf';
+import {timestampFromDate} from '@bufbuild/protobuf/wkt';
 
-function fullEntry(data: LeaderboardShema): FullEntry {
+const toFullEntry = (data: LeaderboardShema) => {
   const {gameId, playerId, score, custom, lastUpdatedAt} = data;
   return {
     gameId,
     playerId,
     entry: {
-      lastUpdatedAt: dateToTimestamp(lastUpdatedAt),
+      lastUpdatedAt: timestampFromDate(lastUpdatedAt),
       stats: {score, custom},
     },
   };
-}
+};
 
-export function entry(data: LeaderboardShema): Entry {
-  return fullEntry(data).entry;
-}
+export const toEntryDto = (data: LeaderboardShema): pb.Entry =>
+  create(pb.EntrySchema, toFullEntry(data).entry);
 
-export function leaderboardEntry(data: LeaderboardShema): LeaderboardEntry {
-  const {gameId, ...entry} = fullEntry(data);
-  return entry;
-}
+export const toLeaderboardEntryDto = (
+  data: LeaderboardShema,
+): pb.LeaderboardEntry => {
+  const {gameId, ...entry} = toFullEntry(data);
 
-export function playerStatsEntry(data: LeaderboardShema): PlayerStatsEntry {
-  const {playerId, ...entry} = fullEntry(data);
-  return entry;
-}
+  return create(pb.LeaderboardEntrySchema, entry);
+};
+
+export const toPlayerStatsEntryDto = (
+  data: LeaderboardShema,
+): pb.PlayerStatsEntry => {
+  const {playerId, ...entry} = toFullEntry(data);
+
+  return create(pb.PlayerStatsEntrySchema, entry);
+};

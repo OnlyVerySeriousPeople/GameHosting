@@ -3,18 +3,18 @@ import {DatabaseError, InternalError, RequestError} from '../../errors';
 import {logger} from '../../utils/logger';
 import {methodDecoratorFactory} from '../../utils/method_decorator_factory';
 
-export const handleError = (desc?: string) =>
+export const HandleError = (desc?: string) =>
   methodDecoratorFactory((err: unknown) => {
     logger.error(err);
 
-    const formatMessage = (msg: string) => (desc ? `${desc} (${msg})` : msg);
+    const formatMsg = (msg: string) => (desc ? `${desc} (${msg})` : msg);
 
     if (err instanceof RequestError) {
-      throw new ConnectError(formatMessage(err.message), Code.InvalidArgument);
+      throw new ConnectError(formatMsg(err.message), Code.InvalidArgument);
     }
 
     if (err instanceof DatabaseError || err instanceof InternalError) {
-      throw new ConnectError(formatMessage(err.message), Code.Internal);
+      throw new ConnectError(formatMsg(err.message), Code.Internal);
     }
 
     if (err instanceof Error) {

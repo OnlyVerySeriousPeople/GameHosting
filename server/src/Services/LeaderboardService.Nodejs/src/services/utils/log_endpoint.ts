@@ -1,7 +1,7 @@
 import {logger} from '../../utils/logger';
 import {methodDecoratorFactory} from '../../utils/method_decorator_factory';
 
-export const logEndpoint = (endpointName?: string) =>
+export const LogEndpoint = (endpointName?: string) =>
   methodDecoratorFactory((...args: unknown[]) => {
     if (process.env.NODE_ENV !== 'development') return;
 

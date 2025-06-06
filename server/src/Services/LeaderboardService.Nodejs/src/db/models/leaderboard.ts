@@ -1,11 +1,6 @@
 import {FilterQuery, Model, model} from 'mongoose';
 import {LeaderboardShema, leaderboardShema} from '../schemas/leaderboard';
-import {DatabaseError} from '../../errors';
-import {methodDecoratorFactory} from '../../utils/method-decorator-factory';
-
-const handleError = methodDecoratorFactory(err => {
-  throw DatabaseError.from(err);
-}, 'catch');
+import {HandleError} from './utils/handle_error';
 
 export class LeaderboardModel {
   private readonly model: Model<LeaderboardShema>;
@@ -14,7 +9,7 @@ export class LeaderboardModel {
     this.model = model<LeaderboardShema>('Leaderboard', leaderboardShema);
   }
 
-  @handleError
+  @HandleError
   async getLeaderboard(
     gameId: string,
     entryLimit: number,
@@ -39,12 +34,12 @@ export class LeaderboardModel {
     };
   }
 
-  @handleError
+  @HandleError
   async deleteLeaderboard(gameId: string) {
     await this.model.deleteMany({gameId});
   }
 
-  @handleError
+  @HandleError
   async updatePlayerStats(
     gameId: string,
     playerId: string,
@@ -61,19 +56,19 @@ export class LeaderboardModel {
     );
   }
 
-  @handleError
+  @HandleError
   async getPlayerStats(gameId: string, playerId: string) {
     const entry = await this.model.findOne({gameId, playerId}).lean();
     return entry as LeaderboardShema;
   }
 
-  @handleError
+  @HandleError
   async getAllPlayerStats(playerId: string) {
     const entries = await this.model.find({playerId}).lean();
     return entries as LeaderboardShema[];
   }
 
-  @handleError
+  @HandleError
   async deleteAllPlayerStats(playerId: string) {
     await this.model.deleteMany({playerId});
   }
