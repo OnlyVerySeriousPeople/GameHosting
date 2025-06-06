@@ -1,0 +1,45 @@
+﻿using AuthService.Dotnet.Application.Contracts;
+using AuthService.Dotnet.Domain.Entities;
+using AuthService.Dotnet.Domain.Exceptions;
+using AuthService.Dotnet.Infrastructure.Common.Mappings;
+using AuthService.Dotnet.Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
+
+namespace AuthService.Dotnet.Infrastructure.Helpers
+{
+	public class AuthHelper(UserManager<UserIdentity> userManager)
+		: IAuthHelper
+	{
+		public async Task<User> CreateNewUserAsync(
+			string email,
+			string? username,
+			string? playerId,
+			string? password)
+		{
+			var existingUser = await userManager.FindByEmailAsync(email);
+			if (existingUser is not null)
+				throw new UserCreationException(email, "User with such email already exists.");
+
+			var identity = new UserIdentity()
+			{
+				Email = email,
+				UserName = username,
+				PlayerId = playerId,
+				CreatedAt = DateTime.UtcNow,
+			};
+
+			IdentityResult result;
+
+			if (password is null)
+				result = await userManager.CreateAsync(identity);
+			else
+				result = await userManager.CreateAsync(identity, password);
+
+
+			if (result.Succeeded) return identity.ToDomain();
+
+			var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+			throw new UserCreationException(email, errors);
+		}
+	}
+}

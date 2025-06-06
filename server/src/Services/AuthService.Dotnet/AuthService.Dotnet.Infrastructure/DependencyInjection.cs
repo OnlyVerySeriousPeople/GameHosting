@@ -1,4 +1,7 @@
-﻿using AuthService.Dotnet.Infrastructure.Extensions;
+﻿using AuthService.Dotnet.Application.Contracts;
+using AuthService.Dotnet.Infrastructure.Extensions;
+using AuthService.Dotnet.Infrastructure.Helpers;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace AuthService.Dotnet.Infrastructure
@@ -10,6 +13,7 @@ namespace AuthService.Dotnet.Infrastructure
 			var config = builder.Configuration;
 
 			builder.Services.AddConfiguredExchangeRedisCache(config);
+			builder.Services.AddScoped<IAuthHelper, AuthHelper>();
 			return builder;
 		}
 	}
