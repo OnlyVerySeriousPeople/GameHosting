@@ -484,3 +484,5 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/server/src/Services/AuthService.Dotnet/AuthService.Dotnet.Grpc/appsettings.json
+/server/src/Services/AuthService.Dotnet/AuthService.Dotnet.Grpc/appsettings.Development.json
