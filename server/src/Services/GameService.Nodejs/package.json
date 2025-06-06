@@ -1,6 +1,7 @@
 {
-  "name": "game-service",
+  "name": "@game-hosting/game",
   "version": "0.0.0",
+  "description": "Game microservice of the OVSP GameHosting project",
   "scripts": {
     "db:wait": "dotenvx run -- sh -c 'wait-on --timeout 60 tcp:$DB_HOST:$DB_PORT'",
     "db:migrate": "dotenvx run -- kysely migrate latest",

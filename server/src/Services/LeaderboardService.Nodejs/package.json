@@ -1,6 +1,7 @@
 {
-  "name": "leaderboard-service",
+  "name": "@game-hosting/leaderboard",
   "version": "0.0.0",
+  "description": "Leaderboard microservice of the OVSP GameHosting project",
   "scripts": {
     "db:wait": "dotenvx run -- sh -c 'wait-on --timeout 60 tcp:$DB_HOST:$DB_PORT'",
     "gen": "buf generate",

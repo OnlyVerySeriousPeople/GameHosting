@@ -3,12 +3,14 @@
   "compilerOptions": {
     "module": "Node18",
     "target": "ES2024",
-    "lib": ["ES2023"],
+    "lib": ["ES2023", "DOM"],
     "esModuleInterop": true,
     "strict": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "rootDir": "src"
+    "paths": {
+      "*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"]
 }

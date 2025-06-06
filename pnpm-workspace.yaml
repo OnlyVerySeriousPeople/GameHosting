@@ -1,0 +1,3 @@
+packages:
+  - "server/src/BuildingBlocks/*.Nodejs"
+  - "server/src/Services/*.Nodejs"
