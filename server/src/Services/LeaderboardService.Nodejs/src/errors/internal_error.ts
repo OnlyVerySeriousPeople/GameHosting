@@ -1,10 +1,11 @@
-const ERR_NAME = 'InternalError';
-
 export class InternalError extends Error {
-  override name = ERR_NAME;
+  static readonly ERR_NAME: string = 'InternalError';
+
+  override name: string;
 
   constructor(message = 'unexpected internal error') {
     super(message);
+    this.name = (this.constructor as typeof InternalError).ERR_NAME;
   }
 
   static from<T extends typeof InternalError>(
@@ -16,10 +17,16 @@ export class InternalError extends Error {
   }
 
   static [Symbol.hasInstance](instance: unknown): boolean {
-    return (
-      instance instanceof Error &&
-      (instance.name === ERR_NAME ||
-        Object.getPrototypeOf(instance)?.constructor?.name === ERR_NAME)
-    );
+    if (!(instance instanceof Error)) return false;
+
+    for (
+      let proto = Object.getPrototypeOf(instance);
+      proto;
+      proto = Object.getPrototypeOf(proto)
+    ) {
+      if (proto.constructor === this) return true;
+    }
+
+    return false;
   }
 }
