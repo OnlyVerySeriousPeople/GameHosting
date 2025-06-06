@@ -9,7 +9,8 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 {
 	public class AuthHelper(
 		UserManager<UserIdentity> userManager,
-		SignInManager<UserIdentity> signInManager)
+		SignInManager<UserIdentity> signInManager,
+		ITokenService tokenService)
 		: IAuthHelper
 	{
 		public async Task<User> CreateNewUserAsync(
@@ -55,6 +56,35 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				throw new ValidateCredentialsException("Invalid password");
 
 			return identity.ToDomain();
+		}
+
+		public async Task<AuthenticationResultValue> PrepareAuthenticationResultValue(User user, string prefix,
+			CancellationToken cancellationToken)
+		{
+			var (jwtToken, jwtExpirationDate) = tokenService.GenerateJwtToken(user);
+			var (refreshToken, refreshExpirationDate) = tokenService.GenerateRefreshToken();
+
+			var refreshTokenEntity = new RefreshToken
+			{
+				Token = refreshToken,
+				CreatedAt = DateTime.UtcNow,
+				Expiration = refreshExpirationDate,
+				UserId = user.Id
+			};
+
+			var isTokenStored = await tokenService.StoreRefreshTokenAsync(refreshTokenEntity,
+				prefix, cancellationToken);
+
+			if (!isTokenStored)
+				throw new StoreRefreshTokenException(user.Id);
+
+			return new AuthenticationResultValue()
+			{
+				JwtToken = jwtToken,
+				JwtTokenExpiresAt = jwtExpirationDate,
+				RefreshToken = refreshToken,
+				RefreshTokenExpiresAt = refreshExpirationDate
+			};
 		}
 	}
 }

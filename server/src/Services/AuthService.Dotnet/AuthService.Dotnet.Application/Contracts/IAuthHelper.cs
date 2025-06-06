@@ -6,5 +6,8 @@ namespace AuthService.Dotnet.Application.Contracts
 	{
 		Task<User> CreateNewUserAsync(string email, string? username, string? playerId, string? password);
 		Task<User> ValidateCredentialsAsync(string email, string password);
+
+		Task<AuthenticationResultValue> PrepareAuthenticationResultValue(User user, string prefix,
+			CancellationToken cancellationToken);
 	}
 }
