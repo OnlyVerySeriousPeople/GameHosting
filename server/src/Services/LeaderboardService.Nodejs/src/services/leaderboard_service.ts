@@ -4,15 +4,15 @@ import {
   greaterThanZero,
   nonEmptyStr,
   plainObj,
-} from '../dtos/validators';
+} from '@game-hosting/common/dto_validators';
 import {Database, LeaderboardModel} from '../db';
 import {
   toEntryDto,
   toLeaderboardEntryDto,
   toPlayerStatsEntryDto,
 } from '../dtos/leaderboard';
-import {HandleError} from './utils/handle_error';
-import {LogEndpoint} from './utils/log_endpoint';
+import {HandleError} from '@game-hosting/common/grpc_service_utils';
+import {LogEndpoint} from '@game-hosting/common/grpc_service_utils';
 import {create} from '@bufbuild/protobuf';
 
 export class LeaderboardService {

@@ -2,9 +2,33 @@
   "name": "@game-hosting/common",
   "version": "0.0.0",
   "description": "Shared Node.js modules of the OVSP GameHosting project",
+  "exports": {
+    "./errors": {
+      "require": "./build/errors/index.js",
+      "types": "./build/errors/index.d.ts"
+    },
+    "./utils": {
+      "require": "./build/utils/index.js",
+      "types": "./build/utils/index.d.ts"
+    },
+    "./db_model_utils": {
+      "require": "./build/db_model_utils/index.js",
+      "types": "./build/db_model_utils/index.d.ts"
+    },
+    "./grpc_service_utils": {
+      "require": "./build/grpc_service_utils/index.js",
+      "types": "./build/grpc_service_utils/index.d.ts"
+    },
+    "./dto_validators": {
+      "require": "./build/dto_validators/index.js",
+      "types": "./build/dto_validators/index.d.ts"
+    }
+  },
   "scripts": {
+    "build": "tsc",
     "lint": "eslint 'src/**/*.ts'",
-    "fix": "eslint --fix 'src/**/*.ts'"
+    "fix": "eslint --fix 'src/**/*.ts'",
+    "prepare": "pnpm run build"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",

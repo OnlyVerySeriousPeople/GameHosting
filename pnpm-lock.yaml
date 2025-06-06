@@ -97,6 +97,9 @@ importers:
       '@dotenvx/dotenvx':
         specifier: ^1.44.1
         version: 1.44.1
+      '@game-hosting/common':
+        specifier: workspace:*
+        version: link:../../BuildingBlocks/Common.Nodejs
       fastify:
         specifier: ^5.3.3
         version: 5.3.3

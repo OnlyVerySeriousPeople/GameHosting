@@ -1,4 +1,4 @@
-import {DatabaseError} from '../errors';
+import {DatabaseError} from '@game-hosting/common/errors';
 import {LeaderboardModel} from './models/leaderboard';
 import {LeaderboardShema} from './schemas/leaderboard';
 import {connect} from 'mongoose';

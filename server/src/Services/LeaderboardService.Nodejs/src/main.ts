@@ -2,7 +2,7 @@ import {connectToDatabase} from './db';
 import {env} from 'process';
 import fastify from 'fastify';
 import {fastifyConnectPlugin} from '@connectrpc/connect-fastify';
-import {logger} from './utils/logger';
+import {logger} from '@game-hosting/common/utils';
 import {routes} from './routes';
 
 void (async () => {

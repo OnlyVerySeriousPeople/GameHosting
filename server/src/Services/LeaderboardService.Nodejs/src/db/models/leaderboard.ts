@@ -1,6 +1,6 @@
 import {FilterQuery, Model, model} from 'mongoose';
 import {LeaderboardShema, leaderboardShema} from '../schemas/leaderboard';
-import {HandleError} from './utils/handle_error';
+import {HandleError} from '@game-hosting/common/db_model_utils';
 
 export class LeaderboardModel {
   private readonly model: Model<LeaderboardShema>;
