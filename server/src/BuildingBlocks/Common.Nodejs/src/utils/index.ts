@@ -1,5 +1,3 @@
-import {camelToSnake} from './camel_to_snake';
-import {logger} from './logger';
-import {methodDecoratorFactory} from './method_decorator_factory';
-
-export {camelToSnake, logger, methodDecoratorFactory};
+export * from './camel_to_snake';
+export * from './logger';
+export * from './method_decorator_factory';
