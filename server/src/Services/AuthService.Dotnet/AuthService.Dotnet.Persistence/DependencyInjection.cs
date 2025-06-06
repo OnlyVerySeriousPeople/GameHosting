@@ -1,4 +1,6 @@
-﻿using AuthService.Dotnet.Persistence.Data;
+﻿using AuthService.Dotnet.Domain.Options;
+using AuthService.Dotnet.Persistence.Data;
+using AuthService.Dotnet.Persistence.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,8 +12,14 @@ namespace AuthService.Dotnet.Persistence
 	{
 		public static void AddAuthPersistence(this IHostApplicationBuilder builder)
 		{
-			var connectionString = builder.Configuration.GetConnectionString("Postgres");
+			var config = builder.Configuration;
+
+			var connectionString = config.GetConnectionString("Postgres");
+			builder.Services.Configure<IdentityCheckOptions>(config.GetSection("Authentication"));
+
 			builder.Services.AddDbContext<AuthDbContext>(opt => { opt.UseNpgsql(connectionString); });
+
+			builder.Services.AddConfiguredIdentity(config);
 		}
 	}
 }

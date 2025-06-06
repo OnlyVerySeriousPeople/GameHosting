@@ -1,3 +1,4 @@
+using AuthService.Dotnet.Domain.Options;
 using AuthService.Dotnet.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
