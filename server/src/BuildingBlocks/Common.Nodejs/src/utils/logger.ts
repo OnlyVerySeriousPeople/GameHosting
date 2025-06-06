@@ -29,7 +29,14 @@ const createRotatingFileStream = (): pino.DestinationStream => {
         currentDay = today;
         stream = fs.createWriteStream(getLogFileName(), {flags: 'a'});
       }
-      stream.write(log);
+
+      try {
+        const obj = JSON.parse(log);
+        if (obj.err?.stack) delete obj.err.stack;
+        stream.write(JSON.stringify(obj) + '\n');
+      } catch {
+        stream.write(log);
+      }
     },
   };
 };
