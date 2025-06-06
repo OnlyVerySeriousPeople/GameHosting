@@ -12,6 +12,8 @@ export class InternalError extends Error {
     this: T,
     err: unknown,
   ): InstanceType<T> {
+    if (err instanceof this) return err as InstanceType<T>;
+
     const message = err instanceof Error ? err.message : String(err);
     return new this(message) as InstanceType<T>;
   }
