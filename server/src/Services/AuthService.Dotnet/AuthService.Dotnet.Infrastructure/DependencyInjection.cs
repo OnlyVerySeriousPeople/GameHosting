@@ -1,5 +1,6 @@
 ﻿using AuthService.Dotnet.Application.Contracts;
 using AuthService.Dotnet.Infrastructure.Extensions;
+using AuthService.Dotnet.Infrastructure.Factories;
 using AuthService.Dotnet.Infrastructure.Helpers;
 using AuthService.Dotnet.Options;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ namespace AuthService.Dotnet.Infrastructure
 
 			builder.Services.AddConfiguredExchangeRedisCache(config);
 			builder.Services.AddScoped<IAuthHelper, AuthHelper>();
+			builder.Services.AddScoped<IStrategyFactory<IAuthenticationStrategy>, AuthenticationStrategyFactory>();
+
 			return builder;
 		}
 	}
