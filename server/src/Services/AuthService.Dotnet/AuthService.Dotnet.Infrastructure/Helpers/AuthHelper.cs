@@ -86,5 +86,18 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				RefreshTokenExpiresAt = refreshExpirationDate
 			};
 		}
+
+		public async Task<User> VerifyRefreshToken(string token, string prefix, CancellationToken cancellationToken)
+		{
+			var refreshToken = await tokenService.GetRefreshTokenAsync(token, prefix, cancellationToken);
+			if (refreshToken is null || refreshToken.Expiration < DateTime.Now)
+				throw new RefreshTokenException("Invalid or expired refresh token.");
+
+			var identity = await userManager.FindByIdAsync(refreshToken.UserId);
+			if (identity is null)
+				throw new RefreshTokenException("User associated with the refresh token not found.");
+
+			return identity.ToDomain();
+		}
 	}
 }

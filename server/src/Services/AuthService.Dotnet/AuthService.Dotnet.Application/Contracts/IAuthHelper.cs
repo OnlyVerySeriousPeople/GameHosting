@@ -9,5 +9,7 @@ namespace AuthService.Dotnet.Application.Contracts
 
 		Task<AuthenticationResultValue> PrepareAuthenticationResultValue(User user, string prefix,
 			CancellationToken cancellationToken);
+
+		Task<User> VerifyRefreshToken(string token, string prefix, CancellationToken cancellationToken);
 	}
 }
