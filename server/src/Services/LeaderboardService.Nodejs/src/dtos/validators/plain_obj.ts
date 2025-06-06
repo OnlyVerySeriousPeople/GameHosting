@@ -1,5 +1,6 @@
 import {Data, Predicate, Validator} from './types';
 import {RequestError} from '../../errors';
+import {camelToSnake} from '../../utils/camel_to_snake';
 
 export const isPlainObj: Predicate = value =>
   typeof value === 'object' &&
@@ -11,7 +12,9 @@ export const plainObj =
   data => {
     for (const key of keys) {
       if (!isPlainObj(data[key])) {
-        throw new RequestError(`field ${String(key)} must be a plain object`);
+        throw new RequestError(
+          `field ${camelToSnake(String(key))} must be a plain object`,
+        );
       }
     }
   };

@@ -1,5 +1,6 @@
 import {Data, Predicate, Validator} from './types';
 import {RequestError} from '../../errors';
+import {camelToSnake} from '../../utils/camel_to_snake';
 
 export const isNonEmptyStr: Predicate = value =>
   typeof value === 'string' && value !== '';
@@ -10,7 +11,7 @@ export const nonEmptyStr =
     for (const key of keys) {
       if (!isNonEmptyStr(data[key])) {
         throw new RequestError(
-          `field ${String(key)} must be a non-empty string`,
+          `field ${camelToSnake(String(key))} must be a non-empty string`,
         );
       }
     }
