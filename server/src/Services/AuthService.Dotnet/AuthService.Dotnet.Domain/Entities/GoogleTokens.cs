@@ -2,7 +2,7 @@
 
 namespace AuthService.Dotnet.Domain.Entities
 {
-	internal class GoogleTokens
+	public class GoogleTokens
 	{
 		[JsonProperty("access_token")] public string AccessToken { get; set; } = string.Empty;
 		[JsonProperty("expires_in")] public long ExpiresIn { get; set; }
