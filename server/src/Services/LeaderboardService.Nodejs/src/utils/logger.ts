@@ -36,9 +36,9 @@ const createRotatingFileStream = (): pino.DestinationStream => {
 
 const streams: pino.StreamEntry[] = [
   {
+    level: 'debug',
     stream: pretty({
       colorize: true,
-      levelFirst: true,
       translateTime: 'SYS:yyyy-mm-dd HH:MM:ss',
       ignore: 'pid,hostname',
     }),
@@ -47,14 +47,14 @@ const streams: pino.StreamEntry[] = [
 
 if (LOGS_DIR) {
   streams.push({
-    stream: createRotatingFileStream(),
     level: 'error',
+    stream: createRotatingFileStream(),
   });
 }
 
 export const logger = pino(
   {
-    level: 'info',
+    level: 'debug',
     timestamp: () => `,"time":"${new Date().toISOString()}"`,
   },
   pino.multistream(streams),

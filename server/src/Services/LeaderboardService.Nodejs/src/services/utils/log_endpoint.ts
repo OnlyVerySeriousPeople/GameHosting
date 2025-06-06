@@ -6,8 +6,11 @@ export const LogEndpoint = (endpointName?: string) =>
     if (process.env.NODE_ENV !== 'development') return;
 
     const [res, req] = args;
-    const message = endpointName
-      ? `${endpointName}(${req}) -> ${res}`
-      : `${req} -> ${res}`;
-    logger.debug(message);
+    logger.debug(
+      {
+        reguest: req,
+        response: res,
+      },
+      endpointName,
+    );
   }, 'after');
