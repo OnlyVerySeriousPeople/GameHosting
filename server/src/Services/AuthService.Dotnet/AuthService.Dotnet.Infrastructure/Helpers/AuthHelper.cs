@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Dotnet.Infrastructure.Helpers
 {
-	public class AuthHelper(UserManager<UserIdentity> userManager)
+	public class AuthHelper(
+		UserManager<UserIdentity> userManager,
+		SignInManager<UserIdentity> signInManager)
 		: IAuthHelper
 	{
 		public async Task<User> CreateNewUserAsync(
@@ -40,6 +42,19 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 
 			var errors = string.Join(", ", result.Errors.Select(e => e.Description));
 			throw new UserCreationException(email, errors);
+		}
+
+		public async Task<User> ValidateCredentialsAsync(string email, string password)
+		{
+			var identity = await userManager.FindByEmailAsync(email);
+			if (identity is null)
+				throw new ValidateCredentialsException("User with such email not found");
+
+			var signInResult = await signInManager.CheckPasswordSignInAsync(identity, password, false);
+			if (!signInResult.Succeeded)
+				throw new ValidateCredentialsException("Invalid password");
+
+			return identity.ToDomain();
 		}
 	}
 }
