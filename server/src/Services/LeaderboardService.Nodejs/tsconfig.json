@@ -6,6 +6,8 @@
     "lib": ["ES2023", "DOM"],
     "esModuleInterop": true,
     "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "rootDir": "src",
     "outDir": "build"
   },

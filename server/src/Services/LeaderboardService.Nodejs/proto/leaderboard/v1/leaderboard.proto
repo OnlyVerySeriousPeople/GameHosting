@@ -2,25 +2,15 @@ syntax = "proto3";
 
 package leaderboard.v1;
 
-import "google/protobuf/struct.proto";
-import "google/protobuf/timestamp.proto";
+import "leaderboard/v1/types.proto";
 
 service LeaderboardService {
   rpc GetLeaderboard(GetLeaderboardRequest) returns (GetLeaderboardResponse);
+  rpc DeleteLeaderboard(DeleteLeaderboardRequest) returns (DeleteLeaderboardResponse);
   rpc UpdatePlayerStats(UpdatePlayerStatsRequest) returns (UpdatePlayerStatsResponse);
   rpc GetPlayerStats(GetPlayerStatsRequest) returns (GetPlayerStatsResponse);
-}
-
-message LeaderboardEntryData {
-  uint32 score = 1;
-  google.protobuf.Struct custom = 2;
-}
-
-message LeaderboardEntry {
-  string game_id = 1;
-  string player_id = 2;
-  google.protobuf.Timestamp last_updated_at = 3;
-  LeaderboardEntryData data = 4;
+  rpc GetAllPlayerStats(GetAllPlayerStatsRequest) returns (GetAllPlayerStatsResponse);
+  rpc DeleteAllPlayerStats(DeleteAllPlayerStatsRequest) returns (DeleteAllPlayerStatsResponse);
 }
 
 message GetLeaderboardRequest {
@@ -30,15 +20,22 @@ message GetLeaderboardRequest {
 }
 
 message GetLeaderboardResponse {
-  bool exists = 1;
-  repeated LeaderboardEntry entries = 2;
-  optional uint32 next_score_cursor = 3;
+  repeated LeaderboardEntry entries = 1;
+  optional uint32 next_score_cursor = 2;
+}
+
+message DeleteLeaderboardRequest {
+  string game_id = 1;
+}
+
+message DeleteLeaderboardResponse {
+  bool ok = 1;
 }
 
 message UpdatePlayerStatsRequest {
   string game_id = 1;
   string player_id = 2;
-  LeaderboardEntryData data = 3;
+  Stats stats = 3;
 }
 
 message UpdatePlayerStatsResponse {
@@ -46,9 +43,26 @@ message UpdatePlayerStatsResponse {
 }
 
 message GetPlayerStatsRequest {
-  string player_id = 1;
+  string game_id = 1;
+  string player_id = 2;
 }
 
 message GetPlayerStatsResponse {
-  repeated LeaderboardEntry entries = 1;
+  Entry entry = 1;
+}
+
+message GetAllPlayerStatsRequest {
+  string player_id = 1;
+}
+
+message GetAllPlayerStatsResponse {
+  repeated PlayerStatsEntry entries = 1;
+}
+
+message DeleteAllPlayerStatsRequest {
+  string player_id = 1;
+}
+
+message DeleteAllPlayerStatsResponse {
+  bool ok = 1;
 }

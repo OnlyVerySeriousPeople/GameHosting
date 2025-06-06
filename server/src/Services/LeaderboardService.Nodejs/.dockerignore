@@ -34,3 +34,5 @@ node_modules
 src/gen
 build
 tsconfig.tsbuildinfo
+logs
+**/*.log
