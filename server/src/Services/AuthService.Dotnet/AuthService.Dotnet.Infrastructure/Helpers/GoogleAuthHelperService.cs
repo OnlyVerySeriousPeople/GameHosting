@@ -30,19 +30,19 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			_redirectUri = $"{redirectUrl}/api/login";
 		}
 
-		public async Task<GoogleTokens> RetrieveGoogleTokens(string code, CancellationToken cancellationToken)
+		public async Task<GoogleTokens> RetrieveGoogleTokensAsync(string code, CancellationToken cancellationToken)
 		{
 			var requestContent = PrepareRetrieveTokenRequestContent(code);
 			return await MakeRequestForGoogleTokensAsync(_options.TokenEndpoint, requestContent, cancellationToken);
 		}
 
-		public async Task<GoogleTokens> RefreshGoogleTokens(string refreshToken, CancellationToken cancellationToken)
+		public async Task<GoogleTokens> RefreshGoogleTokensAsync(string refreshToken, CancellationToken cancellationToken)
 		{
 			var requestContent = PrepareRefreshTokenRequestContent(refreshToken);
 			return await MakeRequestForGoogleTokensAsync(_options.RefreshEndpoint, requestContent, cancellationToken);
 		}
 
-		public async Task<GoogleUserInfo> GetGoogleUserInfo(string token, CancellationToken cancellationToken)
+		public async Task<GoogleUserInfo> GetGoogleUserInfoAsync(string token, CancellationToken cancellationToken)
 		{
 			var queryContent = new Dictionary<string, string?> { { "access_token", token } };
 			var uri = QueryHelpers.AddQueryString(_options.UserInfoEndpoint, queryContent);

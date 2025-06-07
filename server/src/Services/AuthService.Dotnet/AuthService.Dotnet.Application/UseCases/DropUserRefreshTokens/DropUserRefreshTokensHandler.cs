@@ -4,12 +4,12 @@ using MediatR;
 
 namespace AuthService.Dotnet.Application.UseCases.DropUserRefreshTokens
 {
-	public class DropUserRefreshTokensHandler(IAuthHelper authHelper)
+	public class DropUserRefreshTokensHandler(IAuthHelperService authHelperService)
 		: ICommandHandler<DropUserRefreshTokensCommand, Unit>
 	{
 		public async Task<Unit> Handle(DropUserRefreshTokensCommand request, CancellationToken cancellationToken)
 		{
-			await authHelper.DropAllUserRefreshTokensAsync(request.UserId, cancellationToken);
+			await authHelperService.DropAllUserRefreshTokensAsync(request.UserId, cancellationToken);
 			return Unit.Value;
 		}
 	}

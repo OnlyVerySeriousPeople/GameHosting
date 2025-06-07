@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Dotnet.Infrastructure.Helpers
 {
-	public class AuthHelper(
+	public class AuthHelperService(
 		UserManager<UserIdentity> userManager,
 		SignInManager<UserIdentity> signInManager,
 		ITokenService tokenService)
-		: IAuthHelper
+		: IAuthHelperService
 	{
 		public async Task<User> CreateNewUserAsync(
 			string email,
@@ -58,7 +58,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			return identity.ToDomain();
 		}
 
-		public async Task<AuthenticationResultValue> PrepareAuthenticationResultValue(User user, string prefix,
+		public async Task<AuthenticationResultValue> PrepareAuthenticationResultValueAsync(User user, string prefix,
 			CancellationToken cancellationToken)
 		{
 			var (jwtToken, jwtExpirationDate) = tokenService.GenerateJwtToken(user);
@@ -87,7 +87,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			};
 		}
 
-		public async Task<User> VerifyRefreshToken(string token, string prefix, CancellationToken cancellationToken)
+		public async Task<User> VerifyRefreshTokenAsync(string token, string prefix, CancellationToken cancellationToken)
 		{
 			var refreshToken = await tokenService.GetRefreshTokenAsync(token, prefix, cancellationToken);
 			if (refreshToken is null || refreshToken.Expiration < DateTime.Now)

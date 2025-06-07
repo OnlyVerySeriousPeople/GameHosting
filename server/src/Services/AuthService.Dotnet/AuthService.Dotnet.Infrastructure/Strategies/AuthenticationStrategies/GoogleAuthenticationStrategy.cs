@@ -9,7 +9,7 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 {
 	public class GoogleAuthenticationStrategy(
 		IGoogleAuthHelperService googleAuthHelper,
-		IAuthHelper authHelper,
+		IAuthHelperService authHelperService,
 		UserManager<UserIdentity> userManager)
 		: IAuthenticationStrategy
 	{
@@ -24,18 +24,18 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 				if (string.IsNullOrEmpty(code))
 					throw new InvalidOperationException("Missing 'code' in credentials for Google authentication.");
 
-				var googleTokens = await googleAuthHelper.RetrieveGoogleTokens(code, cancellationToken);
+				var googleTokens = await googleAuthHelper.RetrieveGoogleTokensAsync(code, cancellationToken);
 
 				var googleUserInfo =
-					await googleAuthHelper.GetGoogleUserInfo(googleTokens.AccessToken, cancellationToken);
+					await googleAuthHelper.GetGoogleUserInfoAsync(googleTokens.AccessToken, cancellationToken);
 
 				var identity = await userManager.FindByEmailAsync(googleUserInfo.Email);
 				User? user;
 
 				if (identity is not null) user = identity.ToDomain();
-				else user = await authHelper.CreateNewUserAsync(googleUserInfo.Email, null, null, null);
+				else user = await authHelperService.CreateNewUserAsync(googleUserInfo.Email, null, null, null);
 
-				var resultValue = await authHelper.PrepareAuthenticationResultValue(
+				var resultValue = await authHelperService.PrepareAuthenticationResultValueAsync(
 					user, AuthServiceConstants.GooglePrefix, cancellationToken);
 
 				return new AuthenticationResult

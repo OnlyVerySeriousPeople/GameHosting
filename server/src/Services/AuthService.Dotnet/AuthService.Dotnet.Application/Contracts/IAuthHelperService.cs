@@ -2,15 +2,15 @@
 
 namespace AuthService.Dotnet.Application.Contracts
 {
-	public interface IAuthHelper
+	public interface IAuthHelperService
 	{
 		Task<User> CreateNewUserAsync(string email, string? username, string? playerId, string? password);
 		Task<User> ValidateCredentialsAsync(string email, string password);
 
-		Task<AuthenticationResultValue> PrepareAuthenticationResultValue(User user, string prefix,
+		Task<AuthenticationResultValue> PrepareAuthenticationResultValueAsync(User user, string prefix,
 			CancellationToken cancellationToken);
 
-		Task<User> VerifyRefreshToken(string token, string prefix, CancellationToken cancellationToken);
+		Task<User> VerifyRefreshTokenAsync(string token, string prefix, CancellationToken cancellationToken);
 		Task RemoveAllUserDataAsync(string userId, CancellationToken cancellationToken);
 		Task DropAllUserRefreshTokensAsync(string userId, CancellationToken cancellationToken);
 	}

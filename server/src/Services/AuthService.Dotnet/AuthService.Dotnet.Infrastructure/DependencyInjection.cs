@@ -17,7 +17,7 @@ namespace AuthService.Dotnet.Infrastructure
 			builder.Services.Configure<GoogleAuthOptions>(config.GetSection("Google"));
 
 			builder.Services.AddConfiguredExchangeRedisCache(config);
-			builder.Services.AddScoped<IAuthHelper, AuthHelper>();
+			builder.Services.AddScoped<IAuthHelperService, AuthHelperService>();
 			builder.Services.AddScoped<IStrategyFactory<IAuthenticationStrategy>, AuthenticationStrategyFactory>();
 
 			return builder;

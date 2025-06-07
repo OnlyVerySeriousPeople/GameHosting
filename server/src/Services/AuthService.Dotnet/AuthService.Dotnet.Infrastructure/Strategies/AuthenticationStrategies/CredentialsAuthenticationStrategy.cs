@@ -4,7 +4,7 @@ using AuthService.Dotnet.Domain.Entities;
 
 namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 {
-	public class CredentialsAuthenticationStrategy(IAuthHelper authHelper)
+	public class CredentialsAuthenticationStrategy(IAuthHelperService authHelperService)
 		: IAuthenticationStrategy
 	{
 		public string ProviderName => AuthServiceConstants.CredentialsProviderName;
@@ -21,9 +21,9 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 				if (string.IsNullOrEmpty(password))
 					throw new InvalidOperationException("Missing 'password' in credentials for authentication.");
 
-				var user = await authHelper.ValidateCredentialsAsync(email, password);
+				var user = await authHelperService.ValidateCredentialsAsync(email, password);
 
-				var resultValue = await authHelper.PrepareAuthenticationResultValue(
+				var resultValue = await authHelperService.PrepareAuthenticationResultValueAsync(
 					user, AuthServiceConstants.CredentialsPrefix, cancellationToken);
 
 				return new AuthenticationResult

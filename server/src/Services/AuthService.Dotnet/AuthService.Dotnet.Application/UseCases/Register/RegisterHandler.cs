@@ -6,13 +6,13 @@ using AuthService.Dotnet.Domain.Exceptions;
 namespace AuthService.Dotnet.Application.UseCases.Register
 {
 	public class RegisterHandler(
-		IAuthHelper authHelper,
+		IAuthHelperService authHelperService,
 		ITokenService tokenService)
 		: ICommandHandler<RegisterCommand, RegisterResult>
 	{
 		public async Task<RegisterResult> Handle(RegisterCommand command, CancellationToken cancellationToken)
 		{
-			var newUser = await authHelper.CreateNewUserAsync(
+			var newUser = await authHelperService.CreateNewUserAsync(
 				command.Email, command.Username, command.PlayerId, command.Password);
 
 			var (jwtToken, jwtExpirationDate) = tokenService.GenerateJwtToken(newUser);
