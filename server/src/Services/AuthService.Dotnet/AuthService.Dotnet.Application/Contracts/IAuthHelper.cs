@@ -11,5 +11,7 @@ namespace AuthService.Dotnet.Application.Contracts
 			CancellationToken cancellationToken);
 
 		Task<User> VerifyRefreshToken(string token, string prefix, CancellationToken cancellationToken);
+		Task RemoveAllUserDataAsync(string userId);
+		Task DropAllUserRefreshTokensAsync(string userId);
 	}
 }

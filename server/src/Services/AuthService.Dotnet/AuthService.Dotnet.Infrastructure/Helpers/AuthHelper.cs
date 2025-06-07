@@ -99,5 +99,28 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 
 			return identity.ToDomain();
 		}
+
+		public async Task RemoveAllUserDataAsync(string userId)
+		{
+			var user = await userManager.FindByIdAsync(userId);
+			if (user is null)
+				throw new UserNotFoundException(userId);
+
+			var result = await userManager.DeleteAsync(user);
+			if (!result.Succeeded)
+			{
+				var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+				throw new UserDeletionException(userId, errors);
+			}
+
+			await DropAllUserRefreshTokensAsync(userId);
+		}
+
+		public async Task DropAllUserRefreshTokensAsync(string userId)
+		{
+			var isRevoked = await tokenService.RevokeAllUserRefreshTokensAsync(userId);
+			if (!isRevoked)
+				throw new RefreshTokenRevokeException();
+		}
 	}
 }
