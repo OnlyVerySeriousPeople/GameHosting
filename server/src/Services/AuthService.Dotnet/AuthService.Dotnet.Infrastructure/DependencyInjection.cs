@@ -1,8 +1,8 @@
 ﻿using AuthService.Dotnet.Application.Contracts;
+using AuthService.Dotnet.Domain.Options;
 using AuthService.Dotnet.Infrastructure.Extensions;
 using AuthService.Dotnet.Infrastructure.Factories;
 using AuthService.Dotnet.Infrastructure.Helpers;
-using AuthService.Dotnet.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 

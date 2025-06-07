@@ -3,7 +3,7 @@ using System.Text.Json;
 using AuthService.Dotnet.Application.Contracts;
 using AuthService.Dotnet.Domain.Entities;
 using AuthService.Dotnet.Domain.Exceptions;
-using AuthService.Dotnet.Options;
+using AuthService.Dotnet.Domain.Options;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
