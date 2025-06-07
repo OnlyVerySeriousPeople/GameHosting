@@ -9,7 +9,13 @@ namespace AuthService.Dotnet.Application.UseCases.Login
 	{
 		public async Task<Result<LoginResult>> Handle(LoginCommand command, CancellationToken cancellationToken)
 		{
-			var strategy = strategyFactory.GetStrategy(command.Provider);
+			var strategyResult = strategyFactory.GetStrategy(command.Provider);
+
+			if (!strategyResult.IsSuccess)
+				return Result<LoginResult>.Failure(strategyResult.Error!);
+
+			var strategy = strategyResult.Value!;
+
 			var credentials = new Dictionary<string, string?>
 			{
 				{ "email", command.Email },

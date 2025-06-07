@@ -66,7 +66,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			var responseContent =
 				await response.Content.ReadFromJsonAsync<GoogleUserInfo>(jsonOptions, cancellationToken);
 			if (responseContent is null)
-				throw new InvalidOperationException("Failed to parse google user profile info response.");
+				return Result<GoogleUserInfo>.Failure(OperationErrors.ParsingFailed("google user profile info response"));
 
 			return Result<GoogleUserInfo>.Success(responseContent);
 		}
@@ -121,7 +121,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 
 			var responseContent = await response.Content.ReadFromJsonAsync<GoogleTokens>(cancellationToken);
 			if (responseContent is null)
-				throw new InvalidOperationException("Failed to parse google tokens response.");
+				return Result<GoogleTokens>.Failure(OperationErrors.ParsingFailed("google tokens response"));
 
 			return Result<GoogleTokens>.Success(responseContent);
 		}

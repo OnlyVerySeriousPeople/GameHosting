@@ -1,6 +1,7 @@
 ﻿using AuthService.Dotnet.Application.Contracts;
 using AuthService.Dotnet.Domain.Constants;
 using AuthService.Dotnet.Domain.Entities;
+using AuthService.Dotnet.Domain.Exceptions;
 
 namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 {
@@ -14,10 +15,11 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 		{
 			var email = credentials["email"];
 			if (string.IsNullOrEmpty(email))
-				throw new InvalidOperationException("Missing 'email' in credentials for authentication.");
+				return Result<AuthenticationResultValue>.Failure(OperationErrors.MissingValue("email"));
+
 			var password = credentials["password"];
 			if (string.IsNullOrEmpty(password))
-				throw new InvalidOperationException("Missing 'password' in credentials for authentication.");
+				return Result<AuthenticationResultValue>.Failure(OperationErrors.MissingValue("password"));
 
 			var validationResult = await authHelperService.ValidateCredentialsAsync(email, password);
 			if (!validationResult.IsSuccess)

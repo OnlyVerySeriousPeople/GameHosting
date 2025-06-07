@@ -1,8 +1,10 @@
-﻿namespace AuthService.Dotnet.Application.Contracts
+﻿using AuthService.Dotnet.Domain.Entities;
+
+namespace AuthService.Dotnet.Application.Contracts
 {
-	public interface IStrategyFactory<out TStrategy>
+	public interface IStrategyFactory<TStrategy>
 		where TStrategy : IStrategy
 	{
-		TStrategy GetStrategy(string providerName);
+		Result<TStrategy> GetStrategy(string providerName);
 	}
 }

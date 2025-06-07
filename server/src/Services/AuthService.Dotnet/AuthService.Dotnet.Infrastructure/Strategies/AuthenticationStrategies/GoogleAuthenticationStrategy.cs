@@ -1,6 +1,7 @@
 ﻿using AuthService.Dotnet.Application.Contracts;
 using AuthService.Dotnet.Domain.Constants;
 using AuthService.Dotnet.Domain.Entities;
+using AuthService.Dotnet.Domain.Exceptions;
 using AuthService.Dotnet.Infrastructure.Common.Mappings;
 using AuthService.Dotnet.Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
@@ -20,7 +21,7 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 		{
 			var code = credentials["code"];
 			if (string.IsNullOrEmpty(code))
-				throw new InvalidOperationException("Missing 'code' in credentials for Google authentication.");
+				return Result<AuthenticationResultValue>.Failure(OperationErrors.MissingValue("code"));
 
 			var retrieveGoogleTokensResult = await googleAuthHelper.RetrieveGoogleTokensAsync(code, cancellationToken);
 
