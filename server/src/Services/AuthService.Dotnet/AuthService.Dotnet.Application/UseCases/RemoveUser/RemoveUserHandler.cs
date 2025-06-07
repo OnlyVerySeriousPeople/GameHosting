@@ -8,7 +8,7 @@ namespace AuthService.Dotnet.Application.UseCases.RemoveUser
 	{
 		public async Task<Unit> Handle(RemoveUserCommand command, CancellationToken cancellationToken)
 		{
-			await authHelper.RemoveAllUserDataAsync(command.UserId);
+			await authHelper.RemoveAllUserDataAsync(command.UserId, cancellationToken);
 			return Unit.Value;
 		}
 	}

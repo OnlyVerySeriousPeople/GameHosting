@@ -100,7 +100,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			return identity.ToDomain();
 		}
 
-		public async Task RemoveAllUserDataAsync(string userId)
+		public async Task RemoveAllUserDataAsync(string userId, CancellationToken cancellationToken)
 		{
 			var user = await userManager.FindByIdAsync(userId);
 			if (user is null)
@@ -113,12 +113,12 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				throw new UserDeletionException(userId, errors);
 			}
 
-			await DropAllUserRefreshTokensAsync(userId);
+			await DropAllUserRefreshTokensAsync(userId, cancellationToken);
 		}
 
-		public async Task DropAllUserRefreshTokensAsync(string userId)
+		public async Task DropAllUserRefreshTokensAsync(string userId, CancellationToken cancellationToken)
 		{
-			var isRevoked = await tokenService.RevokeAllUserRefreshTokensAsync(userId);
+			var isRevoked = await tokenService.RevokeAllUserRefreshTokensAsync(userId, cancellationToken);
 			if (!isRevoked)
 				throw new RefreshTokenRevokeException();
 		}
