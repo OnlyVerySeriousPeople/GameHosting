@@ -20,6 +20,9 @@ importers:
       '@dotenvx/dotenvx':
         specifier: ^1.44.1
         version: 1.44.1
+      '@game-hosting/common':
+        specifier: github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs
+        version: https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/779626a89acb281cbe1a5c4f27eedf921c2e3840#path:/server/src/BuildingBlocks/Common.Nodejs(@bufbuild/protobuf@2.5.1)
       fastify:
         specifier: ^5.3.3
         version: 5.3.3
@@ -198,6 +201,11 @@ packages:
 
   '@fastify/proxy-addr@5.0.0':
     resolution: {integrity: sha512-37qVVA1qZ5sgH7KpHkkC4z9SK6StIsIcOmpjvMPXNb3vx2GQxhZocogVYbr2PbbeLCQxYIPDok307xEvRZOzGA==}
+
+  '@game-hosting/common@https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/779626a89acb281cbe1a5c4f27eedf921c2e3840#path:/server/src/BuildingBlocks/Common.Nodejs':
+    resolution: {path: /server/src/BuildingBlocks/Common.Nodejs, tarball: https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/779626a89acb281cbe1a5c4f27eedf921c2e3840}
+    version: 0.0.0
+    engines: {node: '>=12.0.0'}
 
   '@hapi/hoek@9.3.0':
     resolution: {integrity: sha512-/c6rf4UJlmHlC9b5BaNvzAcFv7HZ2QHaV0D4/HNlBdvFnvQq8RI4kYdhyPCl7Xj+oWvTWQ8ujhqS53LIgAe6KQ==}
@@ -1847,6 +1855,14 @@ snapshots:
     dependencies:
       '@fastify/forwarded': 3.0.0
       ipaddr.js: 2.2.0
+
+  '@game-hosting/common@https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/779626a89acb281cbe1a5c4f27eedf921c2e3840#path:/server/src/BuildingBlocks/Common.Nodejs(@bufbuild/protobuf@2.5.1)':
+    dependencies:
+      '@connectrpc/connect': 2.0.2(@bufbuild/protobuf@2.5.1)
+      pino: 9.7.0
+      pino-pretty: 13.0.0
+    transitivePeerDependencies:
+      - '@bufbuild/protobuf'
 
   '@hapi/hoek@9.3.0': {}
 
