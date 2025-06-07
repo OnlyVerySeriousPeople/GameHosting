@@ -1,4 +1,4 @@
-import * as proto from './gen/proto/leaderboard/v1/leaderboard_pb';
+import * as proto from './gen_proto';
 import {ConnectRouter} from '@connectrpc/connect';
 import {Database} from './db';
 import {LeaderboardService} from './services/leaderboard_service';

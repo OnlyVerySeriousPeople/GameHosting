@@ -1,8 +1,5 @@
-import {DB, GameCategory} from './gen/kysely/index';
-import {
-  GameService,
-  GetGameCategoriesRequest,
-} from './gen/proto/game/v1/game_pb';
+import {DB, GameCategory} from './gen_kysely';
+import {GameService, GetGameCategoriesRequest} from './gen_proto';
 import {Kysely, PostgresDialect, sql} from 'kysely';
 import Fastify from 'fastify';
 import {Pool} from 'pg';
