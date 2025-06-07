@@ -3,6 +3,7 @@ using AuthService.Dotnet.Domain.Entities;
 using AuthService.Dotnet.Domain.Exceptions;
 using AuthService.Dotnet.Infrastructure.Common.Mappings;
 using AuthService.Dotnet.Infrastructure.Models;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace AuthService.Dotnet.Infrastructure.Helpers
@@ -13,15 +14,15 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 		ITokenService tokenService)
 		: IAuthHelperService
 	{
-		public async Task<User> CreateNewUserAsync(
+		public async Task<Result<User>> CreateNewUserAsync(
 			string email,
 			string? username,
 			string? playerId,
 			string? password)
 		{
 			var existingUser = await userManager.FindByEmailAsync(email);
-			if (existingUser is not null)
-				throw new UserCreationException(email, "User with such email already exists.");
+			if (existingUser is not null) 
+				return Result<User>.Failure(UserErrors.AlreadyExist(email));
 
 			var identity = new UserIdentity()
 			{
@@ -39,23 +40,24 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				result = await userManager.CreateAsync(identity, password);
 
 
-			if (result.Succeeded) return identity.ToDomain();
+			if (result.Succeeded) return
+				Result<User>.Success(identity.ToDomain());
 
 			var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-			throw new UserCreationException(email, errors);
+			return Result<User>.Failure(UserErrors.CreationFailed(email, errors));
 		}
 
-		public async Task<User> ValidateCredentialsAsync(string email, string password)
+		public async Task<Result<User>> ValidateCredentialsAsync(string email, string password)
 		{
 			var identity = await userManager.FindByEmailAsync(email);
 			if (identity is null)
-				throw new ValidateCredentialsException("User with such email not found");
+				return Result<User>.Failure(UserErrors.NotFound(email));
 
 			var signInResult = await signInManager.CheckPasswordSignInAsync(identity, password, false);
 			if (!signInResult.Succeeded)
-				throw new ValidateCredentialsException("Invalid password");
+				return Result<User>.Failure(UserErrors.InvalidPassword());
 
-			return identity.ToDomain();
+			return Result<User>.Success(identity.ToDomain());
 		}
 
 		public async Task<AuthenticationResultValue> PrepareAuthenticationResultValueAsync(User user, string prefix,
@@ -100,20 +102,21 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			return identity.ToDomain();
 		}
 
-		public async Task RemoveAllUserDataAsync(string userId, CancellationToken cancellationToken)
+		public async Task<Result<Unit>> RemoveAllUserDataAsync(string userId, CancellationToken cancellationToken)
 		{
 			var user = await userManager.FindByIdAsync(userId);
-			if (user is null)
-				throw new UserNotFoundException(userId);
+			if (user is null) 
+				return Result<Unit>.Failure(UserErrors.NotFound(userId));
 
 			var result = await userManager.DeleteAsync(user);
 			if (!result.Succeeded)
 			{
 				var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-				throw new UserDeletionException(userId, errors);
+				return Result<Unit>.Failure(UserErrors.DeletionFailed(userId, errors));
 			}
 
 			await DropAllUserRefreshTokensAsync(userId, cancellationToken);
+			return Result<Unit>.Success(Unit.Value);
 		}
 
 		public async Task DropAllUserRefreshTokensAsync(string userId, CancellationToken cancellationToken)

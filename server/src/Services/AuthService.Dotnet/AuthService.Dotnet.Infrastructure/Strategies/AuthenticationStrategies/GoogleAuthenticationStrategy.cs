@@ -15,43 +15,40 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 	{
 		public string ProviderName => AuthServiceConstants.GoogleProviderName;
 
-		public async Task<AuthenticationResult> AuthenticateAsync(Dictionary<string, string?> credentials,
+		public async Task<Result<AuthenticationResultValue>> AuthenticateAsync(Dictionary<string, string?> credentials,
 			CancellationToken cancellationToken)
 		{
-			try
+			var code = credentials["code"];
+			if (string.IsNullOrEmpty(code))
+				throw new InvalidOperationException("Missing 'code' in credentials for Google authentication.");
+
+			var googleTokens = await googleAuthHelper.RetrieveGoogleTokensAsync(code, cancellationToken);
+
+			var googleUserInfo =
+				await googleAuthHelper.GetGoogleUserInfoAsync(googleTokens.AccessToken, cancellationToken);
+
+			var identity = await userManager.FindByEmailAsync(googleUserInfo.Email);
+
+			User? user;
+
+			if (identity is not null)
 			{
-				var code = credentials["code"];
-				if (string.IsNullOrEmpty(code))
-					throw new InvalidOperationException("Missing 'code' in credentials for Google authentication.");
-
-				var googleTokens = await googleAuthHelper.RetrieveGoogleTokensAsync(code, cancellationToken);
-
-				var googleUserInfo =
-					await googleAuthHelper.GetGoogleUserInfoAsync(googleTokens.AccessToken, cancellationToken);
-
-				var identity = await userManager.FindByEmailAsync(googleUserInfo.Email);
-				User? user;
-
-				if (identity is not null) user = identity.ToDomain();
-				else user = await authHelperService.CreateNewUserAsync(googleUserInfo.Email, null, null, null);
-
-				var resultValue = await authHelperService.PrepareAuthenticationResultValueAsync(
-					user, AuthServiceConstants.GooglePrefix, cancellationToken);
-
-				return new AuthenticationResult
-				{
-					IsSuccess = true,
-					Value = resultValue
-				};
+				user = identity.ToDomain();
 			}
-			catch (Exception ex)
+			else
 			{
-				return new AuthenticationResult
-				{
-					IsSuccess = false,
-					Error = ex
-				};
+				var result = await authHelperService.CreateNewUserAsync(googleUserInfo.Email, null, null, null);
+				if (!result.IsSuccess)
+					return Result<AuthenticationResultValue>.Failure(result.Error!);
+
+				user = result.Value;
 			}
+
+			var resultValue = await authHelperService.PrepareAuthenticationResultValueAsync(
+				user!, AuthServiceConstants.GooglePrefix, cancellationToken);
+
+
+			return Result<AuthenticationResultValue>.Success(resultValue);
 		}
 	}
 }

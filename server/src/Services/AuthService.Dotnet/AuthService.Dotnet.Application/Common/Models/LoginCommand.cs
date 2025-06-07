@@ -1,5 +1,5 @@
-﻿
-using AuthService.Dotnet.Application.Contracts;
+﻿using AuthService.Dotnet.Application.Contracts;
+using AuthService.Dotnet.Domain.Entities;
 
 namespace AuthService.Dotnet.Application.Common.Models
 {
@@ -8,5 +8,5 @@ namespace AuthService.Dotnet.Application.Common.Models
 		string? Password,
 		string? Code,
 		string Provider)
-		: ICommand<LoginResult>;
+		: ICommand<Result<LoginResult>>;
 }
