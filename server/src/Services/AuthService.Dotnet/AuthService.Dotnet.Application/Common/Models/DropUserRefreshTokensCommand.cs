@@ -1,0 +1,8 @@
+﻿using AuthService.Dotnet.Application.Contracts;
+using MediatR;
+
+namespace AuthService.Dotnet.Application.Common.Models
+{
+	public record DropUserRefreshTokensCommand(string UserId)
+		: ICommand<Unit>;
+}
