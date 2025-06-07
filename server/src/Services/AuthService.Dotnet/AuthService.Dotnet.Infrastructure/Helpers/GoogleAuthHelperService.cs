@@ -30,19 +30,21 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			_redirectUri = $"{redirectUrl}/api/login";
 		}
 
-		public async Task<GoogleTokens> RetrieveGoogleTokensAsync(string code, CancellationToken cancellationToken)
+		public async Task<Result<GoogleTokens>> RetrieveGoogleTokensAsync(string code, CancellationToken cancellationToken)
 		{
 			var requestContent = PrepareRetrieveTokenRequestContent(code);
 			return await MakeRequestForGoogleTokensAsync(_options.TokenEndpoint, requestContent, cancellationToken);
 		}
 
-		public async Task<GoogleTokens> RefreshGoogleTokensAsync(string refreshToken, CancellationToken cancellationToken)
+		public async Task<Result<GoogleTokens>> RefreshGoogleTokensAsync(string refreshToken,
+			CancellationToken cancellationToken)
 		{
 			var requestContent = PrepareRefreshTokenRequestContent(refreshToken);
 			return await MakeRequestForGoogleTokensAsync(_options.RefreshEndpoint, requestContent, cancellationToken);
 		}
 
-		public async Task<GoogleUserInfo> GetGoogleUserInfoAsync(string token, CancellationToken cancellationToken)
+		public async Task<Result<GoogleUserInfo>> GetGoogleUserInfoAsync(string token,
+			CancellationToken cancellationToken)
 		{
 			var queryContent = new Dictionary<string, string?> { { "access_token", token } };
 			var uri = QueryHelpers.AddQueryString(_options.UserInfoEndpoint, queryContent);
@@ -50,8 +52,10 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			var response = await _httpClient.GetAsync(uri, cancellationToken);
 
 			if (!response.IsSuccessStatusCode)
-				throw new HttpRequestToGoogleException(response.StatusCode,
-					await response.Content.ReadAsStringAsync(cancellationToken));
+				return Result<GoogleUserInfo>.Failure(HttpRequestErrors.SendingFailed(
+					response.StatusCode,
+					await response.Content.ReadAsStringAsync(cancellationToken)));
+
 
 			// TODO: set JsonProperty in model
 			var jsonOptions = new JsonSerializerOptions
@@ -59,11 +63,12 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase
 			};
 
-			var responseContent = await response.Content.ReadFromJsonAsync<GoogleUserInfo>(jsonOptions, cancellationToken);
+			var responseContent =
+				await response.Content.ReadFromJsonAsync<GoogleUserInfo>(jsonOptions, cancellationToken);
 			if (responseContent is null)
 				throw new InvalidOperationException("Failed to parse google user profile info response.");
 
-			return responseContent;
+			return Result<GoogleUserInfo>.Success(responseContent);
 		}
 
 		public Dictionary<string, string?> PrepareGoogleAuthLinkContent() =>
@@ -105,19 +110,20 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			return new FormUrlEncodedContent(tokenRequest);
 		}
 
-		private async Task<GoogleTokens> MakeRequestForGoogleTokensAsync(string uri,
+		private async Task<Result<GoogleTokens>> MakeRequestForGoogleTokensAsync(string uri,
 			FormUrlEncodedContent content, CancellationToken cancellationToken)
 		{
 			var response = await _httpClient.PostAsync(uri, content, cancellationToken);
 			if (!response.IsSuccessStatusCode)
-				throw new HttpRequestToGoogleException(response.StatusCode,
-					await response.Content.ReadAsStringAsync(cancellationToken));
+				return Result<GoogleTokens>.Failure(HttpRequestErrors.SendingFailed(
+					response.StatusCode,
+					await response.Content.ReadAsStringAsync(cancellationToken)));
 
 			var responseContent = await response.Content.ReadFromJsonAsync<GoogleTokens>(cancellationToken);
 			if (responseContent is null)
 				throw new InvalidOperationException("Failed to parse google tokens response.");
 
-			return responseContent;
+			return Result<GoogleTokens>.Success(responseContent);
 		}
 	}
 }

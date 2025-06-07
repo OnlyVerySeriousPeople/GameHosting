@@ -22,10 +22,18 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 			if (string.IsNullOrEmpty(code))
 				throw new InvalidOperationException("Missing 'code' in credentials for Google authentication.");
 
-			var googleTokens = await googleAuthHelper.RetrieveGoogleTokensAsync(code, cancellationToken);
+			var retrieveGoogleTokensResult = await googleAuthHelper.RetrieveGoogleTokensAsync(code, cancellationToken);
 
-			var googleUserInfo =
+			if (!retrieveGoogleTokensResult.IsSuccess)
+				return Result<AuthenticationResultValue>.Failure(retrieveGoogleTokensResult.Error!);
+			var googleTokens = retrieveGoogleTokensResult.Value!;
+
+			var getGoogleUserInfoResult =
 				await googleAuthHelper.GetGoogleUserInfoAsync(googleTokens.AccessToken, cancellationToken);
+
+			if (!getGoogleUserInfoResult.IsSuccess)
+				return Result<AuthenticationResultValue>.Failure(getGoogleUserInfoResult.Error!);
+			var googleUserInfo = getGoogleUserInfoResult.Value!;
 
 			var identity = await userManager.FindByEmailAsync(googleUserInfo.Email);
 
