@@ -36,7 +36,7 @@ namespace AuthService.Dotnet.Application.UseCases.Register
 				AuthServiceConstants.CredentialsPrefix, cancellationToken);
 
 			if (!isTokenStored)
-				throw new StoreRefreshTokenException(newUser.Id);
+				return Result<RegisterResult>.Failure(RefreshTokenErrors.StoringFailed());
 
 			var registerResult = new RegisterResult(
 				JwtToken: jwtToken,

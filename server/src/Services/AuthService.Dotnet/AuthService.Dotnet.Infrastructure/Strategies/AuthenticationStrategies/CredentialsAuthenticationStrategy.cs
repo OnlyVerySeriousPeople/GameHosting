@@ -25,8 +25,13 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 
 			var user = validationResult.Value!;
 
-			var resultValue = await authHelperService.PrepareAuthenticationResultValueAsync(
+			var result = await authHelperService.PrepareAuthenticationResultValueAsync(
 				user, AuthServiceConstants.CredentialsPrefix, cancellationToken);
+
+			if (!result.IsSuccess)
+				return Result<AuthenticationResultValue>.Failure(result.Error!);
+
+			var resultValue = result.Value!;
 
 			return Result<AuthenticationResultValue>.Success(resultValue);
 		}

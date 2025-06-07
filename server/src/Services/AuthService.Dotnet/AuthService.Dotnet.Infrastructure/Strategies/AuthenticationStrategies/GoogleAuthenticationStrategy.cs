@@ -37,16 +37,20 @@ namespace AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies
 			}
 			else
 			{
-				var result = await authHelperService.CreateNewUserAsync(googleUserInfo.Email, null, null, null);
-				if (!result.IsSuccess)
-					return Result<AuthenticationResultValue>.Failure(result.Error!);
+				var creationResult = await authHelperService.CreateNewUserAsync(googleUserInfo.Email, null, null, null);
+				if (!creationResult.IsSuccess)
+					return Result<AuthenticationResultValue>.Failure(creationResult.Error!);
 
-				user = result.Value;
+				user = creationResult.Value;
 			}
 
-			var resultValue = await authHelperService.PrepareAuthenticationResultValueAsync(
+			var result = await authHelperService.PrepareAuthenticationResultValueAsync(
 				user!, AuthServiceConstants.GooglePrefix, cancellationToken);
 
+			if (!result.IsSuccess)
+				return Result<AuthenticationResultValue>.Failure(result.Error!);
+
+			var resultValue = result.Value!;
 
 			return Result<AuthenticationResultValue>.Success(resultValue);
 		}

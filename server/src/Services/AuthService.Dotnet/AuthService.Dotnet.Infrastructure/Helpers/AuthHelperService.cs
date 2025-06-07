@@ -21,7 +21,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			string? password)
 		{
 			var existingUser = await userManager.FindByEmailAsync(email);
-			if (existingUser is not null) 
+			if (existingUser is not null)
 				return Result<User>.Failure(UserErrors.AlreadyExist(email));
 
 			var identity = new UserIdentity()
@@ -40,8 +40,9 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				result = await userManager.CreateAsync(identity, password);
 
 
-			if (result.Succeeded) return
-				Result<User>.Success(identity.ToDomain());
+			if (result.Succeeded)
+				return
+					Result<User>.Success(identity.ToDomain());
 
 			var errors = string.Join(", ", result.Errors.Select(e => e.Description));
 			return Result<User>.Failure(UserErrors.CreationFailed(email, errors));
@@ -60,7 +61,7 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			return Result<User>.Success(identity.ToDomain());
 		}
 
-		public async Task<AuthenticationResultValue> PrepareAuthenticationResultValueAsync(User user, string prefix,
+		public async Task<Result<AuthenticationResultValue>> PrepareAuthenticationResultValueAsync(User user, string prefix,
 			CancellationToken cancellationToken)
 		{
 			var (jwtToken, jwtExpirationDate) = tokenService.GenerateJwtToken(user);
@@ -78,34 +79,37 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				prefix, cancellationToken);
 
 			if (!isTokenStored)
-				throw new StoreRefreshTokenException(user.Id);
+				return Result<AuthenticationResultValue>.Failure(RefreshTokenErrors.StoringFailed());
 
-			return new AuthenticationResultValue()
+			var result = new AuthenticationResultValue()
 			{
 				JwtToken = jwtToken,
 				JwtTokenExpiresAt = jwtExpirationDate,
 				RefreshToken = refreshToken,
 				RefreshTokenExpiresAt = refreshExpirationDate
 			};
+
+			return Result<AuthenticationResultValue>.Success(result);
 		}
 
-		public async Task<User> VerifyRefreshTokenAsync(string token, string prefix, CancellationToken cancellationToken)
+		public async Task<Result<User>> VerifyRefreshTokenAsync(string token, string prefix,
+			CancellationToken cancellationToken)
 		{
 			var refreshToken = await tokenService.GetRefreshTokenAsync(token, prefix, cancellationToken);
 			if (refreshToken is null || refreshToken.Expiration < DateTime.Now)
-				throw new RefreshTokenException("Invalid or expired refresh token.");
+				return Result<User>.Failure(RefreshTokenErrors.InvalidOrExpired());
 
 			var identity = await userManager.FindByIdAsync(refreshToken.UserId);
 			if (identity is null)
-				throw new RefreshTokenException("User associated with the refresh token not found.");
+				return Result<User>.Failure(RefreshTokenErrors.UserNotFound());
 
-			return identity.ToDomain();
+			return Result<User>.Success(identity.ToDomain());
 		}
 
 		public async Task<Result<Unit>> RemoveAllUserDataAsync(string userId, CancellationToken cancellationToken)
 		{
 			var user = await userManager.FindByIdAsync(userId);
-			if (user is null) 
+			if (user is null)
 				return Result<Unit>.Failure(UserErrors.NotFound(userId));
 
 			var result = await userManager.DeleteAsync(user);
@@ -115,15 +119,21 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 				return Result<Unit>.Failure(UserErrors.DeletionFailed(userId, errors));
 			}
 
-			await DropAllUserRefreshTokensAsync(userId, cancellationToken);
+			var dropResult = await DropAllUserRefreshTokensAsync(userId, cancellationToken);
+			if (!dropResult.IsSuccess)
+				return Result<Unit>.Failure(dropResult.Error!);
+
 			return Result<Unit>.Success(Unit.Value);
 		}
 
-		public async Task DropAllUserRefreshTokensAsync(string userId, CancellationToken cancellationToken)
+		public async Task<Result<Unit>> DropAllUserRefreshTokensAsync(string userId,
+			CancellationToken cancellationToken)
 		{
 			var isRevoked = await tokenService.RevokeAllUserRefreshTokensAsync(userId, cancellationToken);
 			if (!isRevoked)
-				throw new RefreshTokenRevokeException();
+				return Result<Unit>.Failure(RefreshTokenErrors.RevokeFailed());
+
+			return Result<Unit>.Success(Unit.Value);
 		}
 	}
 }

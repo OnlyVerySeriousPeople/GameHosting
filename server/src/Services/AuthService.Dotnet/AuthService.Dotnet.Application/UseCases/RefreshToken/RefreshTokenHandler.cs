@@ -1,5 +1,6 @@
 ﻿using AuthService.Dotnet.Application.Common.Models;
 using AuthService.Dotnet.Application.Contracts;
+using AuthService.Dotnet.Domain.Entities;
 using AuthService.Dotnet.Domain.Exceptions;
 
 namespace AuthService.Dotnet.Application.UseCases.RefreshToken
@@ -7,12 +8,19 @@ namespace AuthService.Dotnet.Application.UseCases.RefreshToken
 	public class RefreshTokenHandler(
 		IAuthHelperService authHelperService,
 		ITokenService tokenService)
-		: ICommandHandler<RefreshTokenCommand, RefreshTokenResult>
+		: ICommandHandler<RefreshTokenCommand, Result<RefreshTokenResult>>
 	{
-		public async Task<RefreshTokenResult> Handle(RefreshTokenCommand command, CancellationToken cancellationToken)
+		public async Task<Result<RefreshTokenResult>> Handle(RefreshTokenCommand command,
+			CancellationToken cancellationToken)
 		{
 			var prefix = command.Prefix.ToLower();
-			var identity = await authHelperService.VerifyRefreshTokenAsync(command.Token, prefix, cancellationToken);
+			var verifyResult =
+				await authHelperService.VerifyRefreshTokenAsync(command.Token, prefix, cancellationToken);
+
+			if (!verifyResult.IsSuccess)
+				return Result<RefreshTokenResult>.Failure(verifyResult.Error!);
+
+			var identity = verifyResult.Value!;
 
 			var (newJwtToken, jwtExpirationDate) = tokenService.GenerateJwtToken(identity);
 			var (newRefreshToken, refreshExpirationDate) = tokenService.GenerateRefreshToken();
@@ -30,13 +38,15 @@ namespace AuthService.Dotnet.Application.UseCases.RefreshToken
 			var isTokenStored = await tokenService.StoreRefreshTokenAsync(refreshToken, prefix, cancellationToken);
 
 			if (!isTokenStored)
-				throw new RefreshTokenException("Failed to store new refresh token.");
+				return Result<RefreshTokenResult>.Failure(RefreshTokenErrors.StoringFailed());
 
-			return new RefreshTokenResult(
+			var result = new RefreshTokenResult(
 				JwtToken: newJwtToken,
 				JwtExpiry: jwtExpirationDate,
 				RefreshToken: newRefreshToken,
 				RefreshExpiry: refreshExpirationDate);
+
+			return Result<RefreshTokenResult>.Success(result);
 		}
 	}
 }
