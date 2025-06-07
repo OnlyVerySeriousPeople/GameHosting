@@ -33,6 +33,7 @@ namespace AuthService.Dotnet.Infrastructure.Services
 				new Claim(ClaimTypes.Email, user.Email),
 				new Claim("username", user.Username),
 				new Claim("playerId", user.PlayerId),
+				new Claim("userId", user.Id),
 			};
 
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
