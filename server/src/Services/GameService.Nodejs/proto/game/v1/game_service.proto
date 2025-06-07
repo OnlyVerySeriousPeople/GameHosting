@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package game.v1;
+
+import "game/v1/game.proto";
+import "game/v1/game_metadata.proto";
+
+service GameService {
+  rpc CreateGame(CreateGameRequest) returns (CreateGameResponse);
+  rpc UpdateGame(UpdateGameRequest) returns (UpdateGameResponse);
+  rpc DeleteGame(DeleteGameRequest) returns (DeleteGameResponse);
+  rpc GetGameCategories(GetGameCategoriesRequest) returns (GetGameCategoriesResponse);
+  rpc GetGames(GetGamesRequest) returns (GetGamesResponse);
+}
+
+message UpdateGameRequest {
+  GameMetadata metadata = 1;
+}
+
+message UpdateGameResponse {
+  bool ok = 1;
+}
+
+message CreateGameRequest {
+  string author_id = 1;
+  GameMetadata metadata = 2;
+}
+
+message CreateGameResponse {
+  bool ok = 1;
+}
+
+message DeleteGameRequest {
+  string game_id = 1;
+}
+
+message DeleteGameResponse {
+  bool ok = 1;
+}
+
+message GetGameCategoriesRequest {
+  bool only_used = 1;
+}
+
+message GetGameCategoriesResponse {
+  repeated string categories = 1;
+}
+
+message GetGamesRequest {
+  oneof by {
+    string name = 1;
+    bool use_categories = 2;
+    string author_id = 3;
+  }
+  repeated string categories = 4;
+  uint32 offset = 5;
+  uint32 limit = 6;
+}
+
+message GetGamesResponse {
+  repeated Game games = 1;
+}
