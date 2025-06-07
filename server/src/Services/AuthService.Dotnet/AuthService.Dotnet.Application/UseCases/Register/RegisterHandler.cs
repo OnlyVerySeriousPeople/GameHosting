@@ -1,7 +1,6 @@
 ﻿using AuthService.Dotnet.Application.Common.Models;
 using AuthService.Dotnet.Application.Contracts;
 using AuthService.Dotnet.Domain.Constants;
-using AuthService.Dotnet.Domain.Entities;
 using AuthService.Dotnet.Domain.Exceptions;
 
 namespace AuthService.Dotnet.Application.UseCases.Register
@@ -19,7 +18,7 @@ namespace AuthService.Dotnet.Application.UseCases.Register
 			var (jwtToken, jwtExpirationDate) = tokenService.GenerateJwtToken(newUser);
 			var (refreshToken, refreshExpirationDate) = tokenService.GenerateRefreshToken();
 
-			var refreshTokenEntity = new RefreshToken
+			var refreshTokenEntity = new Domain.Entities.RefreshToken
 			{
 				Token = refreshToken,
 				CreatedAt = DateTime.UtcNow,
