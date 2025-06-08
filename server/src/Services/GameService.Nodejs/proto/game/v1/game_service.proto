@@ -28,7 +28,9 @@ message UpdateGameRequest {
 
 message UpdateGameResponse {}
 
-message IncGamePlaysRequest {}
+message IncGamePlaysRequest {
+  string game_id = 1;
+}
 
 message IncGamePlaysResponse {}
 

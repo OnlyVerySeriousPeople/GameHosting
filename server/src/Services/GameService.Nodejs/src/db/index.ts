@@ -1,14 +1,16 @@
-import {Kysely, PostgresDialect} from 'kysely';
+import {CamelCasePlugin, Kysely, PostgresDialect} from 'kysely';
 import {DB} from '../gen_kysely';
 import {DatabaseError} from '@game-hosting/common/errors';
 import {GameModel} from './models/game';
 import {Pool} from 'pg';
 
-type Database = {game: GameModel};
+export * from './models/game';
+
+export type Database = {game: GameModel};
 
 let models: Database | undefined;
 
-const connectToDatabase = async () => {
+export const connectToDatabase = async () => {
   if (models) return models;
 
   try {
@@ -16,8 +18,10 @@ const connectToDatabase = async () => {
     if (!url) throw new DatabaseError('no PostgreSQL URL provided');
 
     const pool = new Pool({connectionString: url});
-    const dialect = new PostgresDialect({pool});
-    const db = new Kysely<DB>({dialect});
+    const db = new Kysely<DB>({
+      dialect: new PostgresDialect({pool}),
+      plugins: [new CamelCasePlugin()],
+    });
 
     models = {
       game: new GameModel(db),
@@ -29,5 +33,3 @@ const connectToDatabase = async () => {
 
   return models;
 };
-
-export {connectToDatabase, Database, GameModel};
