@@ -8,17 +8,10 @@ import "game/v1/game_metadata.proto";
 service GameService {
   rpc CreateGame(CreateGameRequest) returns (CreateGameResponse);
   rpc UpdateGame(UpdateGameRequest) returns (UpdateGameResponse);
+  rpc IncGamePlays(IncGamePlaysRequest) returns (IncGamePlaysResponse);
   rpc DeleteGame(DeleteGameRequest) returns (DeleteGameResponse);
   rpc GetGameCategories(GetGameCategoriesRequest) returns (GetGameCategoriesResponse);
   rpc GetGames(GetGamesRequest) returns (GetGamesResponse);
-}
-
-message UpdateGameRequest {
-  GameMetadata metadata = 1;
-}
-
-message UpdateGameResponse {
-  bool ok = 1;
 }
 
 message CreateGameRequest {
@@ -26,17 +19,24 @@ message CreateGameRequest {
   GameMetadata metadata = 2;
 }
 
-message CreateGameResponse {
-  bool ok = 1;
+message CreateGameResponse {}
+
+message UpdateGameRequest {
+  string game_id = 1;
+  GameMetadata metadata = 2;
 }
+
+message UpdateGameResponse {}
+
+message IncGamePlaysRequest {}
+
+message IncGamePlaysResponse {}
 
 message DeleteGameRequest {
   string game_id = 1;
 }
 
-message DeleteGameResponse {
-  bool ok = 1;
-}
+message DeleteGameResponse {}
 
 message GetGameCategoriesRequest {
   bool only_used = 1;
@@ -47,7 +47,7 @@ message GetGameCategoriesResponse {
 }
 
 message GetGamesRequest {
-  oneof by {
+  oneof filter_by {
     string name = 1;
     bool use_categories = 2;
     string author_id = 3;
