@@ -12,7 +12,8 @@
     "dev": "pnpm run gen && ./dev.sh",
     "lint": "buf lint && eslint 'src/**/*.ts'",
     "fix": "eslint --fix 'src/**/*.ts'",
-    "clean": "rm -rf src/gen tsconfig.tsbuildinfo && gts clean"
+    "clean": "rm -rf src/gen tsconfig.tsbuildinfo && gts clean",
+    "postinstall": "pnpm --dir ./node_modules/@game-hosting/common run setup"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.5.1",
