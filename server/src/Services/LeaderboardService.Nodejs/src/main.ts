@@ -1,4 +1,4 @@
-import {connectToDatabase} from './db';
+import {closeDatabaseConnection, connectToDatabase} from './db';
 import {env} from 'process';
 import fastify from 'fastify';
 import {fastifyConnectPlugin} from '@connectrpc/connect-fastify';
@@ -10,6 +10,12 @@ void (async () => {
   const db = await connectToDatabase();
 
   await server.register(fastifyConnectPlugin, {routes: routes(db)});
+
+  server.addHook('onClose', async () => {
+    logger.info('closing database connection...');
+    await closeDatabaseConnection();
+    logger.info('shutting down...');
+  });
 
   server.listen({host: env.HOST, port: Number(env.PORT)}, (err, addr) => {
     if (err) logger.error(err);

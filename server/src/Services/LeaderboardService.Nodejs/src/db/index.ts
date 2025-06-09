@@ -1,7 +1,7 @@
 import {DatabaseError} from '@game-hosting/common/errors';
 import {LeaderboardModel} from './models/leaderboard';
 import {LeaderboardShema} from './schemas/leaderboard';
-import {connect} from 'mongoose';
+import mongoose, {connect} from 'mongoose';
 
 type Database = {leaderboard: LeaderboardModel};
 
@@ -26,4 +26,20 @@ const connectToDatabase = async () => {
   return models;
 };
 
-export {connectToDatabase, Database, LeaderboardShema, LeaderboardModel};
+const closeDatabaseConnection = async () => {
+  try {
+    if (mongoose.connection.readyState === 0) return;
+    await mongoose.connection.close();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    throw new DatabaseError(`failed to close database connection (${message})`);
+  }
+};
+
+export {
+  connectToDatabase,
+  closeDatabaseConnection,
+  Database,
+  LeaderboardShema,
+  LeaderboardModel,
+};

@@ -8,6 +8,7 @@ export * from './models/game';
 
 export type Database = {game: GameModel};
 
+let db: Kysely<DB> | undefined;
 let models: Database | undefined;
 
 export const connectToDatabase = async () => {
@@ -32,4 +33,17 @@ export const connectToDatabase = async () => {
   }
 
   return models;
+};
+
+export const closeDatabaseConnection = async () => {
+  if (!db) {
+    throw new DatabaseError('no connection with a database established');
+  }
+
+  try {
+    await db.destroy();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    throw new DatabaseError(`failed to close database connection (${message})`);
+  }
 };
