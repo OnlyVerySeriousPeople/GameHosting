@@ -53,7 +53,7 @@ export class LeaderboardService {
   }: proto.DeleteLeaderboardRequest): Promise<proto.DeleteLeaderboardResponse> {
     await this.model.deleteLeaderboard(gameId);
 
-    return create(proto.DeleteLeaderboardResponseSchema, {ok: true});
+    return create(proto.DeleteLeaderboardResponseSchema, {});
   }
 
   @LogEndpoint('UpdatePlayerStats')
@@ -74,7 +74,7 @@ export class LeaderboardService {
       stats!.custom,
     );
 
-    return create(proto.UpdatePlayerStatsResponseSchema, {ok: true});
+    return create(proto.UpdatePlayerStatsResponseSchema, {});
   }
 
   @LogEndpoint('GetPlayerStats')
@@ -112,6 +112,6 @@ export class LeaderboardService {
   }: proto.DeleteAllPlayerStatsRequest): Promise<proto.DeleteAllPlayerStatsResponse> {
     await this.model.deleteAllPlayerStats(playerId);
 
-    return create(proto.DeleteAllPlayerStatsResponseSchema, {ok: true});
+    return create(proto.DeleteAllPlayerStatsResponseSchema, {});
   }
 }

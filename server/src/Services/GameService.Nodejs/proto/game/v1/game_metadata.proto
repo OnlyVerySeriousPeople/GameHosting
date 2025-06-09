@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package game.v1;
+
+message GameMetadata {
+  string name = 1;
+  string description = 2;
+  repeated string categories = 3;
+  string icon_url = 4;
+}

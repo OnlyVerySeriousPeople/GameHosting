@@ -2,75 +2,13 @@ syntax = "proto3";
 
 package game.v1;
 
+import "game/v1/game_metadata.proto";
 import "google/protobuf/timestamp.proto";
 
-service GameService {
-  rpc CreateGame(CreateGameRequest) returns (CreateGameResponse);
-  rpc UpdateGame(UpdateGameRequest) returns (UpdateGameResponse);
-  rpc DeleteGame(DeleteGameRequest) returns (DeleteGameResponse);
-  rpc GetGameCategories(GetGameCategoriesRequest) returns (GetGameCategoriesResponse);
-  rpc GetGames(GetGamesRequest) returns (GetGamesResponse);
-}
-
-message GameProfile {
-  string name = 1;
-  string description = 2;
-  string category = 3;
-  string icon_url = 4;
-}
-
-message GameMetadata {
+message Game {
   string id = 1;
   string author_id = 2;
   google.protobuf.Timestamp uploaded_at = 3;
   uint32 total_plays_count = 4;
-  GameProfile profile = 5;
-}
-
-message UpdateGameRequest {
-  GameProfile profile = 1;
-}
-
-message UpdateGameResponse {
-  bool ok = 1;
-  GameMetadata game = 2;
-}
-
-message CreateGameRequest {
-  string author_id = 1;
-  UpdateGameRequest data = 2;
-}
-
-message CreateGameResponse {
-  bool ok = 1;
-  GameMetadata game = 2;
-}
-
-message DeleteGameRequest {
-  string game_id = 1;
-}
-
-message DeleteGameResponse {
-  bool ok = 1;
-}
-
-message GetGameCategoriesRequest {
-  bool only_used = 1;
-}
-
-message GetGameCategoriesResponse {
-  repeated string categories = 1;
-}
-
-message GetGamesRequest {
-  oneof by {
-    string category = 1;
-    string author_id = 2;
-  }
-  uint32 game_from = 3;
-  uint32 game_count = 4;
-}
-
-message GetGamesResponse {
-  repeated GameMetadata games = 1;
+  GameMetadata metadata = 5;
 }
