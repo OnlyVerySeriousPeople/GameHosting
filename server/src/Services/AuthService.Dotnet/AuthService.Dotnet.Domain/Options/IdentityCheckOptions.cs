@@ -1,6 +1,6 @@
 ﻿namespace AuthService.Dotnet.Domain.Options
 {
-	public class IdentityCheckOptions
+	public record IdentityCheckOptions
 	{
 		public bool RequireDigit { get; set; } = true;
 		public int RequiredLength { get; set; } = 8;
