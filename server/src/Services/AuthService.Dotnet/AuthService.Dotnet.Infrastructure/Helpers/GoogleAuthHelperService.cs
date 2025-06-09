@@ -23,9 +23,9 @@ namespace AuthService.Dotnet.Infrastructure.Helpers
 			_httpClient = httpClient;
 			_options = options.Value ?? throw new ArgumentNullException(nameof(options));
 
-			var redirectUrl = config["Gateway:Uri"];
+			var redirectUrl = config["Gateway:Url"];
 			if (string.IsNullOrEmpty(redirectUrl))
-				throw new InvalidOperationException("Missing configuration for Gateway:Uri.");
+				throw new InvalidOperationException("Missing configuration for Gateway:Url.");
 
 			_redirectUri = $"{redirectUrl}/api/login";
 		}
