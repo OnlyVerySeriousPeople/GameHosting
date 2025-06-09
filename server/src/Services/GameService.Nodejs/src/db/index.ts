@@ -4,46 +4,46 @@ import {DatabaseError} from '@game-hosting/common/errors';
 import {GameModel} from './models/game';
 import {Pool} from 'pg';
 
-export * from './models/game';
+type DatabaseModels = {
+  game: GameModel;
+};
 
-export type Database = {game: GameModel};
+class Database {
+  private static instance: Kysely<DB> | null = null;
+  private static models: DatabaseModels | null = null;
 
-let db: Kysely<DB> | undefined;
-let models: Database | undefined;
+  static async connect(): Promise<DatabaseModels> {
+    if (this.models) return this.models;
 
-export const connectToDatabase = async () => {
-  if (models) return models;
-
-  try {
     const url = process.env.DB_URL;
     if (!url) throw new DatabaseError('no PostgreSQL URL provided');
 
-    const pool = new Pool({connectionString: url});
-    const db = new Kysely<DB>({
-      dialect: new PostgresDialect({pool}),
-      plugins: [new CamelCasePlugin()],
-    });
+    try {
+      this.instance = new Kysely<DB>({
+        dialect: new PostgresDialect({pool: new Pool({connectionString: url})}),
+        plugins: [new CamelCasePlugin()],
+      });
+      this.models = {
+        game: new GameModel(this.instance),
+      };
 
-    models = {
-      game: new GameModel(db),
-    };
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    throw new DatabaseError(`cannot connect to the database (${message})`);
+      return this.models;
+    } catch (err) {
+      throw DatabaseError.from(err, msg => `failed to connect: ${msg}`);
+    }
   }
 
-  return models;
-};
+  static async disconnect() {
+    if (!this.instance) return;
 
-export const closeDatabaseConnection = async () => {
-  if (!db) {
-    throw new DatabaseError('no connection with a database established');
+    try {
+      await this.instance.destroy();
+      this.instance = null;
+      this.models = null;
+    } catch (err) {
+      throw DatabaseError.from(err, msg => `failed to disconnect: ${msg}`);
+    }
   }
+}
 
-  try {
-    await db.destroy();
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    throw new DatabaseError(`failed to close database connection (${message})`);
-  }
-};
+export {Database, DatabaseModels, GameModel};

@@ -1,45 +1,42 @@
+import mongoose, {connect} from 'mongoose';
 import {DatabaseError} from '@game-hosting/common/errors';
 import {LeaderboardModel} from './models/leaderboard';
 import {LeaderboardShema} from './schemas/leaderboard';
-import mongoose, {connect} from 'mongoose';
 
-type Database = {leaderboard: LeaderboardModel};
+type DatabaseModels = {leaderboard: LeaderboardModel};
 
-let models: Database | undefined;
+class Database {
+  private static models: DatabaseModels | null = null;
 
-const connectToDatabase = async () => {
-  if (models) return models;
+  static async connect(): Promise<DatabaseModels> {
+    if (this.models) return this.models;
 
-  try {
     const url = process.env.DB_URL;
     if (!url) throw new DatabaseError('no MongoDB URL provided');
 
-    await connect(url);
-    models = {
-      leaderboard: new LeaderboardModel(),
-    };
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    throw new DatabaseError(`cannot connect to the database (${message})`);
+    try {
+      await connect(url);
+
+      this.models = {
+        leaderboard: new LeaderboardModel(),
+      };
+
+      return this.models;
+    } catch (err) {
+      throw DatabaseError.from(err, msg => `failed to connect: ${msg}`);
+    }
   }
 
-  return models;
-};
-
-const closeDatabaseConnection = async () => {
-  try {
+  static async disconnect() {
     if (mongoose.connection.readyState === 0) return;
-    await mongoose.connection.close();
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    throw new DatabaseError(`failed to close database connection (${message})`);
-  }
-};
 
-export {
-  connectToDatabase,
-  closeDatabaseConnection,
-  Database,
-  LeaderboardShema,
-  LeaderboardModel,
-};
+    try {
+      await mongoose.connection.close();
+      this.models = null;
+    } catch (err) {
+      throw DatabaseError.from(err, msg => `failed to disconnect: ${msg}`);
+    }
+  }
+}
+
+export {Database, DatabaseModels, LeaderboardShema, LeaderboardModel};

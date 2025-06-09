@@ -5,20 +5,22 @@ import {
   nonEmptyStr,
   plainObj,
 } from '@game-hosting/common/dto_validators';
-import {Database, LeaderboardModel} from '../db';
+import {DatabaseModels, LeaderboardModel} from '../db';
 import {
   toEntryDto,
   toLeaderboardEntryDto,
   toPlayerStatsEntryDto,
 } from '../dtos/leaderboard';
-import {HandleError} from '@game-hosting/common/grpc_service_utils';
-import {LogEndpoint} from '@game-hosting/common/grpc_service_utils';
+import {
+  HandleError,
+  LogEndpoint,
+} from '@game-hosting/common/grpc_service_utils';
 import {create} from '@bufbuild/protobuf';
 
 export class LeaderboardService {
   private readonly model: LeaderboardModel;
 
-  constructor({leaderboard}: Database) {
+  constructor({leaderboard}: DatabaseModels) {
     this.model = leaderboard;
   }
 

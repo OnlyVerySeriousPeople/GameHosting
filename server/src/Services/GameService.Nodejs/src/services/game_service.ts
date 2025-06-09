@@ -5,7 +5,7 @@ import {
   nonEmptyStr,
   plainObj,
 } from '@game-hosting/common/dto_validators';
-import {Database, GameFilter, GameModel} from '../db';
+import {DatabaseModels, GameFilter, GameModel} from '../db';
 import {
   HandleError,
   LogEndpoint,
@@ -17,7 +17,7 @@ import {toGameDto} from '../dtos/game';
 export class GameService {
   private readonly model: GameModel;
 
-  constructor({game}: Database) {
+  constructor({game}: DatabaseModels) {
     this.model = game;
   }
 
