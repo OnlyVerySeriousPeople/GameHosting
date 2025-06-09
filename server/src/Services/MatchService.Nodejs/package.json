@@ -1,0 +1,27 @@
+{
+  "name": "@game-hosting/match",
+  "version": "0.0.0",
+  "description": "Match microservice of the OVSP GameHosting project",
+  "scripts": {
+    "build": "tsc",
+    "serve": "dotenvx run -- node ./build/main.js",
+    "dev:serve": "dotenvx run -- ts-node-dev ./src/main.ts",
+    "start": "./start.sh",
+    "dev": "./dev.sh",
+    "lint": "buf lint && eslint 'src/**/*.ts'",
+    "fix": "eslint --fix 'src/**/*.ts'",
+    "clean": "rm -rf src/gen tsconfig.tsbuildinfo && gts clean",
+    "postinstall": "pnpm --dir ./node_modules/@game-hosting/common run setup"
+  },
+  "dependencies": {
+    "@fastify/websocket": "^11.1.0",
+    "fastify": "^5.3.3",
+    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "gts": "^6.0.2",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}
