@@ -11,10 +11,16 @@ export class InternalError extends Error {
   static from<T extends typeof InternalError>(
     this: T,
     err: unknown,
+    format?: (message: string) => string,
   ): InstanceType<T> {
-    if (err instanceof this) return err as InstanceType<T>;
+    const rawMessage = err instanceof Error ? err.message : String(err);
+    const message = format ? format(rawMessage) : rawMessage;
 
-    const message = err instanceof Error ? err.message : String(err);
+    if (err instanceof this) {
+      err.message = message;
+      return err as InstanceType<T>;
+    }
+
     return new this(message) as InstanceType<T>;
   }
 
