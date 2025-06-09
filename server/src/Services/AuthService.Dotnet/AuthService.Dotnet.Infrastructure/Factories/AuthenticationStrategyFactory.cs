@@ -11,8 +11,8 @@ namespace AuthService.Dotnet.Infrastructure.Factories
 	{
 		private readonly Dictionary<string, Type> _strategies = new()
 		{
-			{ AuthServiceConstants.CredentialsProviderName, typeof(CredentialsAuthenticationStrategy) },
-			{ AuthServiceConstants.GoogleProviderName, typeof(GoogleAuthenticationStrategy) }
+			{ AuthServiceConstants.CredentialsProviderName.ToLower(), typeof(CredentialsAuthenticationStrategy) },
+			{ AuthServiceConstants.GoogleProviderName.ToLower(), typeof(GoogleAuthenticationStrategy) }
 		};
 
 		public Result<IAuthenticationStrategy> GetStrategy(string providerName)
