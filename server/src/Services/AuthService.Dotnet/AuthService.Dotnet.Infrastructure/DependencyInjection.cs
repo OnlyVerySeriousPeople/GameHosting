@@ -4,6 +4,7 @@ using AuthService.Dotnet.Infrastructure.Extensions;
 using AuthService.Dotnet.Infrastructure.Factories;
 using AuthService.Dotnet.Infrastructure.Helpers;
 using AuthService.Dotnet.Infrastructure.Services;
+using AuthService.Dotnet.Infrastructure.Strategies.AuthenticationStrategies;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -23,6 +24,8 @@ namespace AuthService.Dotnet.Infrastructure
 			builder.Services.AddHttpClient<IGoogleAuthHelperService, GoogleAuthHelperService>();
 			builder.Services.AddScoped<ITokenService, TokenService>();	
 			builder.Services.AddScoped<IStrategyFactory<IAuthenticationStrategy>, AuthenticationStrategyFactory>();
+			builder.Services.AddScoped<CredentialsAuthenticationStrategy>();
+			builder.Services.AddScoped<GoogleAuthenticationStrategy>();
 
 			return builder;
 		}
