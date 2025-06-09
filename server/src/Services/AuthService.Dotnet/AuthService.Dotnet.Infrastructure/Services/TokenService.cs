@@ -73,7 +73,7 @@ namespace AuthService.Dotnet.Infrastructure.Services
 				await cache.SetStringAsync(key, serializedRefreshToken, options, cancellationToken);
 
 				var redisDb = redis.GetDatabase();
-				await redisDb.SetAddAsync(refreshToken.UserId, token);
+				await redisDb.SetAddAsync(refreshToken.UserId, key);
 				await redisDb.KeyExpireAsync(refreshToken.UserId, refreshToken.Expiration);
 
 				return true;
