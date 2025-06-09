@@ -1,3 +1,4 @@
+using AuthService.Dotnet.Application.UseCases.Register;
 using AuthService.Dotnet.Infrastructure;
 using AuthService.Dotnet.Persistence;
 
@@ -6,9 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddAuthPersistence();
 builder.AddAuthInfrastructure();
 
-builder.Services.AddMediatR(ctg =>
+builder.Services.AddMediatR(cfg =>
 {
-	ctg.RegisterServicesFromAssemblyContaining<Program>();
+	cfg.RegisterServicesFromAssembly(typeof(RegisterHandler).Assembly);
 });
 
 builder.Services.AddGrpc();
