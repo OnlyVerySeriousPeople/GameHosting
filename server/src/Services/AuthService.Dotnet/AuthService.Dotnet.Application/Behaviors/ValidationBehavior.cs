@@ -6,7 +6,7 @@ namespace AuthService.Dotnet.Application.Behaviors
 {
 	internal class ValidationBehavior<TRequest, TResponse>(IValidationFactory validationFactory)
 		: IPipelineBehavior<TRequest, TResponse>
-		where TRequest : notnull
+		where TRequest : ICommandBase
 		where TResponse : class
 	{
 		public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
