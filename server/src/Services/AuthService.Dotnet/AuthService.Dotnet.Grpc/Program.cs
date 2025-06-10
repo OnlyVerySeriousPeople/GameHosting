@@ -1,9 +1,11 @@
+using AuthService.Dotnet.Application;
 using AuthService.Dotnet.Application.UseCases.Register;
 using AuthService.Dotnet.Infrastructure;
 using AuthService.Dotnet.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddAuthApplication();
 builder.AddAuthPersistence();
 builder.AddAuthInfrastructure();
 
