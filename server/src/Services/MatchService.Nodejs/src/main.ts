@@ -11,8 +11,7 @@ void (async () => {
 
   await server.register(websocketPlugin);
 
-  server.get('/', {websocket: true}, (conn, req) => {
-    const {socket} = conn;
+  server.get('/', {websocket: true}, (socket, req) => {
     const {gameId, playerId} = req.query as {gameId: string; playerId: string};
     if (typeof gameId !== 'string' || typeof playerId !== 'string') {
       socket.close(CloseCode.UnsupportedData);

@@ -4,11 +4,13 @@ import {DatabaseError} from '@game-hosting/common/errors';
 import {GameModel} from './models/game';
 import {Pool} from 'pg';
 
-type DatabaseModels = {
+export * from './models/game';
+
+export type DatabaseModels = {
   game: GameModel;
 };
 
-class Database {
+export class Database {
   private static instance: Kysely<DB> | null = null;
   private static models: DatabaseModels | null = null;
 
@@ -45,5 +47,3 @@ class Database {
     }
   }
 }
-
-export {Database, DatabaseModels, GameModel};
