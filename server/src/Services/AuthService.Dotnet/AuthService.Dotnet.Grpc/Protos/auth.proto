@@ -1,0 +1,97 @@
+﻿syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace  = "AuthService.Dotnet.Grpc";
+
+package auth;
+
+service AuthService {
+  rpc Register (RegisterRequest) returns (RegisterResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
+  rpc RemoveUser (RemoveUserRequest) returns (RemoveUserResponse);
+  rpc DropUserRefreshToken (DropUserRefreshTokenRequest) returns (DropUserRefreshTokenResponse);
+  rpc GetGoogleAuthLink (GetGoogleAuthLinkRequest) returns (GetGoogleAuthLinkResponse);
+}
+
+message Error {
+	string type = 1;
+	string description = 2;
+	int32 restCode = 3;
+}
+
+message Tokens {
+	string jwtToken = 1;
+	google.protobuf.Timestamp jwtExpiry = 2;
+	string refreshToken = 3;
+	google.protobuf.Timestamp refreshExpiry = 4;
+}
+
+message RegisterRequest {
+	string username = 1;
+	string password = 2;
+	string email = 3;
+	string playerId = 4;
+}
+
+message RegisterResponse {
+	oneof response {
+		Tokens tokens = 1;
+		Error error = 2;
+	}
+}
+
+message EmailPassword {
+	string email = 1;
+	string password = 2;
+}
+
+message LoginRequest {
+	oneof credentials {
+		EmailPassword emailPassword = 1;
+		string code = 2;
+	}
+	string provider = 3;
+}
+
+message LoginResponse {
+	oneof response {
+		Tokens tokens = 1;
+		Error error = 2;
+	}
+}
+
+message RefreshTokenRequest {
+	string token = 1;
+	string prefix = 2;
+}
+
+message RefreshTokenResponse {
+	oneof response {
+		Tokens tokens = 1;
+		Error error = 2;
+	}
+}
+
+message RemoveUserRequest {
+	string userId = 1;
+}
+
+message RemoveUserResponse {
+	Error error = 1;
+}
+
+message DropUserRefreshTokenRequest {
+	string userId = 1;
+}
+
+message DropUserRefreshTokenResponse {
+	Error error = 1;
+}
+
+message GetGoogleAuthLinkRequest {
+}
+
+message GetGoogleAuthLinkResponse {
+	string link = 1;
+}
