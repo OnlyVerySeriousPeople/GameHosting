@@ -3,14 +3,14 @@ export interface MatchConfig {
   numberOfTeams: number;
 }
 
-export enum MessageInfoCode {
+export enum MsgInfoCode {
   CheckMessage,
   PlayerJoin,
   PlayerLeave,
   MatchStart,
 }
 
-export enum MessageErrorCode {
+export enum MsgErrCode {
   BadMessage,
   NoDataProvided,
   BadDataReceiver,
@@ -21,7 +21,7 @@ export enum DataReceiver {
   Team,
 }
 
-export enum ConnectionCloseCode {
+export enum ConnCloseCode {
   NormalClosure = 1000,
   MatchFinished = 4000,
   MatchCancelled = 4001,

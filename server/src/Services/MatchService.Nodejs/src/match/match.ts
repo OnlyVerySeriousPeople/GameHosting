@@ -1,9 +1,9 @@
 import * as state from './state';
 import {
-  ConnectionCloseCode,
+  ConnCloseCode,
   DataReceiver,
   MatchConfig,
-  MessageErrorCode,
+  MsgErrCode,
 } from './types';
 import {Player} from './player';
 import {Team} from './team';
@@ -66,7 +66,7 @@ export class Match {
     try {
       parsedMessage = JSON.parse(message);
     } catch (err) {
-      sender.sendError(MessageErrorCode.BadMessage);
+      sender.sendError(MsgErrCode.BadMessage);
       return;
     }
 
@@ -80,14 +80,14 @@ export class Match {
       if (data)
         this.players.forEach(p => {
           broadcastExceptSender(p);
-          p.disconnect(ConnectionCloseCode.MatchFinished);
+          p.disconnect(ConnCloseCode.MatchFinished);
         });
       this.setState(new state.FinishedState(this));
       return;
     }
 
     if (!data) {
-      sender.sendError(MessageErrorCode.NoDataProvided);
+      sender.sendError(MsgErrCode.NoDataProvided);
       return;
     }
 
@@ -96,7 +96,7 @@ export class Match {
     } else if (receiver === DataReceiver.Team) {
       sender.team?.forEach(broadcastExceptSender);
     } else {
-      sender.sendError(MessageErrorCode.BadDataReceiver);
+      sender.sendError(MsgErrCode.BadDataReceiver);
     }
   }
 }

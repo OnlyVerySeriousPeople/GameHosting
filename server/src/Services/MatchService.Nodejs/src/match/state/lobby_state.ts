@@ -1,6 +1,6 @@
 import {MatchState, StateName} from './match_state';
 import {ActiveState} from './active_state';
-import {MessageInfoCode} from '../types';
+import {MsgInfoCode} from '../types';
 import {Player} from '../player';
 
 export class LobbyState extends MatchState {
@@ -10,7 +10,7 @@ export class LobbyState extends MatchState {
     return true;
   }
 
-  private informAboutCurPlayersNum(code: MessageInfoCode) {
+  private informAboutCurPlayersNum(code: MsgInfoCode) {
     const {players} = this.match;
     players.forEach(p =>
       p.sendInfo(code, {
@@ -20,7 +20,7 @@ export class LobbyState extends MatchState {
   }
 
   onPlayerJoin(_player: Player): void {
-    this.informAboutCurPlayersNum(MessageInfoCode.PlayerJoin);
+    this.informAboutCurPlayersNum(MsgInfoCode.PlayerJoin);
 
     const {players, config} = this.match;
     if (players.size === config.numberOfPlayers) {
@@ -43,14 +43,14 @@ export class LobbyState extends MatchState {
           }
         }
 
-        p.sendInfo(MessageInfoCode.MatchStart, {yourTeam, otherTeams});
+        p.sendInfo(MsgInfoCode.MatchStart, {yourTeam, otherTeams});
       });
       this.match.setState(new ActiveState(this.match));
     }
   }
 
   onPlayerLeave(_player: Player): void {
-    this.informAboutCurPlayersNum(MessageInfoCode.PlayerLeave);
+    this.informAboutCurPlayersNum(MsgInfoCode.PlayerLeave);
   }
 
   isFinished(): boolean {
