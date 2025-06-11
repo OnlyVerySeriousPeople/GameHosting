@@ -1,5 +1,6 @@
 import {CloseCode} from './types';
 import {MatchManager} from './match_manager';
+import {env} from 'process';
 import fastify from 'fastify';
 import {logger} from '@game-hosting/common/utils';
 import websocketPlugin from '@fastify/websocket';
@@ -39,7 +40,7 @@ void (async () => {
     logger.info('shutting down...');
   });
 
-  server.listen({port: 8080}, (err, addr) => {
+  server.listen({host: env.HOST, port: Number(env.PORT)}, (err, addr) => {
     if (err) logger.error(err);
     else logger.info(`server runnnig at ${addr}`);
   });

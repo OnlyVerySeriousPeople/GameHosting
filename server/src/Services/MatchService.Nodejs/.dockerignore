@@ -1,0 +1,36 @@
+# Docker
+Dockerfile
+*docker-compose.yaml
+
+# Git
+.gitingnore
+
+# Devenv
+?devenv*
+
+# direnv
+.direnv
+.envrc
+
+# Code style tools
+.editorconfig
+.eslintrc*
+.eslintignore
+.prettierrc*
+.prettierignore
+
+# Node.js packages
+node_modules
+
+# Development files
+dev.sh
+
+# Secrets
+.env
+.env.*
+!.env.example*
+
+# Generated files
+src/gen
+build
+tsconfig.tsbuildinfo
