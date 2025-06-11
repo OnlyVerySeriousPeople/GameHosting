@@ -21,8 +21,7 @@ export enum DataReceiver {
   Team,
 }
 
-export enum ConnCloseCode {
-  NormalClosure = 1000,
+export enum CustomCloseCode {
   MatchFinished = 4000,
   MatchCancelled = 4001,
 }

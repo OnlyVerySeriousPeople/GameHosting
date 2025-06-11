@@ -1,5 +1,5 @@
 import {MatchState, StateName} from './match_state';
-import {ConnCloseCode} from '../types';
+import {CustomCloseCode} from '../types';
 import {Match} from '../match';
 
 export class CancelledState extends MatchState {
@@ -8,7 +8,9 @@ export class CancelledState extends MatchState {
   constructor(match: Match) {
     super(match);
 
-    this.match.players.forEach(p => p.disconnect(ConnCloseCode.MatchCancelled));
+    this.match.players.forEach(p =>
+      p.disconnect(CustomCloseCode.MatchCancelled),
+    );
     this.match.clear();
   }
 

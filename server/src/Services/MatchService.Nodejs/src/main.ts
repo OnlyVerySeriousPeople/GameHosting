@@ -1,23 +1,42 @@
+import {CloseCode} from './types';
+import {MatchManager} from './match_manager';
 import fastify from 'fastify';
 import {logger} from '@game-hosting/common/utils';
 import websocketPlugin from '@fastify/websocket';
 
 void (async () => {
   const server = fastify();
+  const matchManager = new MatchManager();
 
   await server.register(websocketPlugin);
 
-  server.get('/ws', {websocket: true}, conn => {
-    logger.debug('client connected');
+  server.get('/', {websocket: true}, (conn, req) => {
+    const {socket} = conn;
+    const {gameId, playerId} = req.query as {gameId: string; playerId: string};
+    if (typeof gameId !== 'string' || typeof playerId !== 'string') {
+      socket.close(CloseCode.UnsupportedData);
+    }
 
-    conn.socket.on('message', (msg: string) => {
-      logger.debug('received:', msg.toString());
-      conn.socket.send(`echo: ${msg}`);
+    logger.debug(`player ${playerId} connected`);
+
+    const match = matchManager.getOrCreateMatch(gameId);
+    match.addPlayer(playerId, socket);
+
+    socket.on('message', (msg: string) => {
+      logger.debug(`received from player ${playerId}:`, msg);
+      match.handleMessage(playerId, msg);
     });
 
-    conn.socket.on('close', () => {
-      logger.debug('client disconnected');
+    socket.on('close', () => {
+      logger.debug(`player ${playerId} disconnected`);
+      match.removePlayer(playerId);
     });
+  });
+
+  server.addHook('onClose', () => {
+    logger.info('releasing resources...');
+    matchManager.destroy();
+    logger.info('shutting down...');
   });
 
   server.listen({port: 8080}, (err, addr) => {
