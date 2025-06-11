@@ -1,5 +1,6 @@
 import {MatchState, StateName} from './match_state';
 import {CancelledState} from './canceled_state';
+import {ConnectionCloseCode} from '../types';
 import {Player} from '../player';
 
 export class ActiveState extends MatchState {
@@ -11,7 +12,7 @@ export class ActiveState extends MatchState {
 
   onPlayerLeave(_player: Player): void {
     this.match.players.forEach(p => {
-      p.disconnect('match-canceled');
+      p.disconnect(ConnectionCloseCode.MatchCancelled);
     });
     this.match.setState(new CancelledState(this.match));
   }

@@ -28,7 +28,7 @@ export class Player {
     this.send('data', {sender, data});
   }
 
-  disconnect(reason?: string) {
-    this.socket.close(1000, reason);
+  disconnect(code: number, reason?: string) {
+    this.socket.close(code, reason);
   }
 }

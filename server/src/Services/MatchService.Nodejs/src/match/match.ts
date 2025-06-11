@@ -1,5 +1,10 @@
 import * as state from './state';
-import {DataReceiver, MatchConfig, MessageErrorCode} from './types';
+import {
+  ConnectionCloseCode,
+  DataReceiver,
+  MatchConfig,
+  MessageErrorCode,
+} from './types';
 import {Player} from './player';
 import {Team} from './team';
 import {WebSocket} from '@fastify/websocket';
@@ -75,7 +80,7 @@ export class Match {
       if (data)
         this.players.forEach(p => {
           broadcastExceptSender(p);
-          p.disconnect('match-finished');
+          p.disconnect(ConnectionCloseCode.MatchFinished);
         });
       this.setState(new state.FinishedState(this));
       return;
