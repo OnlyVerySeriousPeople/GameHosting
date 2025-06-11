@@ -1,0 +1,13 @@
+# Devenv
+**/.devenv*
+**/devenv.local.nix
+
+# direnv
+**/.direnv
+
+# Node.js packages
+**/node_modules
+
+# Generated files
+**/build
+**/tsconfig.tsbuildinfo

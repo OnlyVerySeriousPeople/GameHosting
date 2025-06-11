@@ -1,0 +1,16 @@
+{
+  "name": "@game-hosting/sdk",
+  "version": "0.0.0",
+  "description": "Simple game SDK for the OVSP GameHosting project",
+  "scripts": {
+    "build": "tsc",
+    "lint": "buf lint && eslint 'src/**/*.ts'",
+    "fix": "eslint --fix 'src/**/*.ts'",
+    "clean": "rm -rf src/gen tsconfig.tsbuildinfo && gts clean"
+  },
+  "devDependencies": {
+    "gts": "^6.0.2",
+    "typescript": "^5.8.3"
+  },
+  "private": true
+}

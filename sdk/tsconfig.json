@@ -1,0 +1,13 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "module": "ES2022",
+    "target": "ES2024",
+    "lib": ["ES2023", "DOM"],
+    "esModuleInterop": true,
+    "strict": true,
+    "rootDir": "src",
+    "outDir": "build"
+  },
+  "include": ["src/**/*"]
+}
