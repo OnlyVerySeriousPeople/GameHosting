@@ -1,10 +1,5 @@
-import * as state from './state';
-import {
-  ConnCloseCode,
-  DataReceiver,
-  MatchConfig,
-  MsgErrCode,
-} from './types';
+import {DataReceiver, MatchConfig, MsgErrCode} from './types';
+import {FinishedState, LobbyState, MatchState} from './state';
 import {Player} from './player';
 import {Team} from './team';
 import {WebSocket} from '@fastify/websocket';
@@ -12,18 +7,15 @@ import {WebSocket} from '@fastify/websocket';
 type PlayerId = string;
 
 export class Match {
-  private state: state.MatchState = new state.LobbyState(this);
+  state: MatchState = new LobbyState(this);
   players: Map<PlayerId, Player> = new Map();
   teams: Set<Team> = new Set();
 
   constructor(readonly config: MatchConfig) {
     while (this.teams.size < config.numberOfTeams) {
-      this.teams.add(new Team(config.numberOfPlayers / config.numberOfTeams));
+      const teamSize = config.numberOfPlayers / config.numberOfTeams;
+      this.teams.add(new Team(teamSize));
     }
-  }
-
-  setState(state: state.MatchState) {
-    this.state = state;
   }
 
   canPlayerJoin() {
@@ -42,12 +34,12 @@ export class Match {
 
   removePlayer(id: PlayerId) {
     const player = this.players.get(id);
-    if (player) {
-      player.team?.delete(player);
-      this.players.delete(id);
+    if (!player) return;
 
-      this.state.onPlayerLeave(player);
-    }
+    player.team?.delete(player);
+    this.players.delete(id);
+
+    this.state.onPlayerLeave(player);
   }
 
   isFinished() {
@@ -58,31 +50,20 @@ export class Match {
     const sender = this.players.get(senderId);
     if (!sender) return;
 
-    let parsedMessage: {
-      receiver: DataReceiver;
-      data: unknown;
-      isFinish?: true;
-    };
+    let parsed: {receiver: DataReceiver; data: unknown; isFinish?: true};
     try {
-      parsedMessage = JSON.parse(message);
-    } catch (err) {
+      parsed = JSON.parse(message);
+    } catch {
       sender.sendError(MsgErrCode.BadMessage);
       return;
     }
 
-    const {isFinish, receiver, data} = parsedMessage;
-
-    const broadcastExceptSender = (player: Player) => {
-      if (player !== sender) player.sendData(senderId, data);
-    };
+    const {isFinish, data, receiver} = parsed;
+    const sendData = (player: Player) => player.sendData(senderId, data);
 
     if (isFinish) {
-      if (data)
-        this.players.forEach(p => {
-          broadcastExceptSender(p);
-          p.disconnect(ConnCloseCode.MatchFinished);
-        });
-      this.setState(new state.FinishedState(this));
+      if (data) this.players.forEach(sendData);
+      this.state = new FinishedState(this);
       return;
     }
 
@@ -92,11 +73,16 @@ export class Match {
     }
 
     if (receiver === DataReceiver.All) {
-      this.players.forEach(broadcastExceptSender);
+      this.players.forEach(sendData);
     } else if (receiver === DataReceiver.Team) {
-      sender.team?.forEach(broadcastExceptSender);
+      sender.team?.forEach(sendData);
     } else {
       sender.sendError(MsgErrCode.BadDataReceiver);
     }
+  }
+
+  clear() {
+    this.players.clear();
+    this.teams.clear();
   }
 }
