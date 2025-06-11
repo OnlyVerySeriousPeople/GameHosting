@@ -4,7 +4,7 @@ set -xe
 
 trap 'docker compose stop' EXIT
 
-docker compose up -d "$(docker compose config --services | grep -v game_api)"
+docker compose up -d "$(docker compose config --services | grep -v game_service)"
 
 pnpm run db:wait
 
