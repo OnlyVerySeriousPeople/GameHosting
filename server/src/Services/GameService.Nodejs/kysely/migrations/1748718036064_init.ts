@@ -14,7 +14,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('authorId', 'uuid', col => col.notNull())
     .addColumn('name', 'varchar(255)', col => col.notNull().unique())
     .addColumn('description', 'text')
-    .addColumn('categories', sql`gameCategory[]`)
+    .addColumn('categories', sql`game_category[]`)
     .addColumn('iconUrl', 'varchar(512)')
     .addColumn('uploadedAt', 'timestamptz', col =>
       col.notNull().defaultTo(sql`CURRENT_TIMESTAMP`),

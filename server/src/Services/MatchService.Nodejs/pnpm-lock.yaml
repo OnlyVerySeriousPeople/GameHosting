@@ -16,7 +16,7 @@ importers:
         version: 11.1.0
       '@game-hosting/common':
         specifier: github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs
-        version: https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/030db77858e6d24160a111ab8b94b4244f4d8fb9#path:/server/src/BuildingBlocks/Common.Nodejs(@bufbuild/protobuf@2.5.2)
+        version: https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/e67ba515171e053f5e44ae7c8bb3c214acf8525b#path:/server/src/BuildingBlocks/Common.Nodejs(@bufbuild/protobuf@2.5.2)
       fastify:
         specifier: ^5.3.3
         version: 5.3.3
@@ -108,8 +108,8 @@ packages:
   '@fastify/websocket@11.1.0':
     resolution: {integrity: sha512-BH6yZjbA5+DjuC9lMgv3hHuaSsf3snph6df9l1zIW6lvZLnYVmxN7OgmGlMKftsTOFB7NePXVCJZPzagunQK5Q==}
 
-  '@game-hosting/common@https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/030db77858e6d24160a111ab8b94b4244f4d8fb9#path:/server/src/BuildingBlocks/Common.Nodejs':
-    resolution: {path: /server/src/BuildingBlocks/Common.Nodejs, tarball: https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/030db77858e6d24160a111ab8b94b4244f4d8fb9}
+  '@game-hosting/common@https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/e67ba515171e053f5e44ae7c8bb3c214acf8525b#path:/server/src/BuildingBlocks/Common.Nodejs':
+    resolution: {path: /server/src/BuildingBlocks/Common.Nodejs, tarball: https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/e67ba515171e053f5e44ae7c8bb3c214acf8525b}
     version: 0.0.0
     engines: {node: '>=12.0.0'}
 
@@ -1547,7 +1547,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@game-hosting/common@https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/030db77858e6d24160a111ab8b94b4244f4d8fb9#path:/server/src/BuildingBlocks/Common.Nodejs(@bufbuild/protobuf@2.5.2)':
+  '@game-hosting/common@https://codeload.github.com/OnlyVerySeriousPeople/GameHosting/tar.gz/e67ba515171e053f5e44ae7c8bb3c214acf8525b#path:/server/src/BuildingBlocks/Common.Nodejs(@bufbuild/protobuf@2.5.2)':
     dependencies:
       '@connectrpc/connect': 2.0.2(@bufbuild/protobuf@2.5.2)
       pino: 9.7.0

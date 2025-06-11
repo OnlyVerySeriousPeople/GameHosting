@@ -2,7 +2,7 @@ FROM alpine
 
 WORKDIR /app
 
-RUN apk add --no-cache nodejs pnpm
+RUN apk add --no-cache nodejs pnpm git
 
 COPY package.json pnpm-lock.yaml .
 RUN pnpm install
