@@ -1,5 +1,4 @@
-import {Match} from './match';
-import {MatchConfig} from './types';
+import {Match, MatchConfig} from './match';
 
 type GameId = string;
 

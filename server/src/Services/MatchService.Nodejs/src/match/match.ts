@@ -1,4 +1,4 @@
-import * as state from './match_state';
+import * as state from './state';
 import {DataReceiver, MatchConfig, MessageErrorCode} from './types';
 import {Player} from './player';
 import {Team} from './team';
