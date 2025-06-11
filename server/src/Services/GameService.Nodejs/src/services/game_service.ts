@@ -12,6 +12,7 @@ import {
 } from '@game-hosting/common/grpc_service_utils';
 import {RequestError} from '@game-hosting/common/errors';
 import {create} from '@bufbuild/protobuf';
+import {leaderboardClient} from '../grpc_clients/leaderboard_client';
 import {toGameDto} from '../dtos/game';
 
 export class GameService {
@@ -84,6 +85,10 @@ export class GameService {
     gameId,
   }: proto.DeleteGameRequest): Promise<proto.DeleteGameResponse> {
     await this.model.deleteGame(gameId);
+
+    await leaderboardClient.deleteLeaderboard(
+      create(proto.DeleteLeaderboardRequestSchema, {gameId}),
+    );
 
     return create(proto.DeleteGameResponseSchema, {});
   }

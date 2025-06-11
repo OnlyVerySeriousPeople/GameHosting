@@ -20,6 +20,7 @@
     "@bufbuild/protobuf": "^2.5.1",
     "@connectrpc/connect": "^2.0.2",
     "@connectrpc/connect-fastify": "^2.0.2",
+    "@connectrpc/connect-node": "^2.0.2",
     "@dotenvx/dotenvx": "^1.44.1",
     "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs",
     "fastify": "^5.3.3",
