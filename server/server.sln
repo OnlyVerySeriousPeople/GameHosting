@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Dotnet.Persiste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthService.Dotnet.Infrastructure", "src\Services\AuthService.Dotnet\AuthService.Dotnet.Infrastructure\AuthService.Dotnet.Infrastructure.csproj", "{F0788707-320C-4A1C-BCFF-1272C52FCB68}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aggregator.Dotnet", "src\Aggregator.Dotnet\Aggregator.Dotnet.csproj", "{BA916E7E-27B8-477E-97B3-69773ED2E77B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{F0788707-320C-4A1C-BCFF-1272C52FCB68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0788707-320C-4A1C-BCFF-1272C52FCB68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0788707-320C-4A1C-BCFF-1272C52FCB68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA916E7E-27B8-477E-97B3-69773ED2E77B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA916E7E-27B8-477E-97B3-69773ED2E77B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA916E7E-27B8-477E-97B3-69773ED2E77B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA916E7E-27B8-477E-97B3-69773ED2E77B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,5 +63,6 @@ Global
 		{FCDBA5B8-E114-4BF7-BA95-6DD7971E0FAC} = {A0A680BB-5962-4A87-BC56-ECE52B2F9EB7}
 		{1096326D-FE7C-4B90-8687-5DC77F35D56C} = {A0A680BB-5962-4A87-BC56-ECE52B2F9EB7}
 		{F0788707-320C-4A1C-BCFF-1272C52FCB68} = {A0A680BB-5962-4A87-BC56-ECE52B2F9EB7}
+		{BA916E7E-27B8-477E-97B3-69773ED2E77B} = {633B3914-EB24-4446-8C00-67D2F8AF7C12}
 	EndGlobalSection
 EndGlobal
