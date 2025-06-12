@@ -1,5 +1,5 @@
 import {MatchState, StateName} from './match_state';
-import {CustomCloseCode} from '../types';
+import {CustomCloseCode} from '@game-hosting/match-message-codes';
 import {Match} from '../match';
 
 export class FinishedState extends MatchState {

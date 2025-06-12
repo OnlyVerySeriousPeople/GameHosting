@@ -1,5 +1,6 @@
-import {DataReceiver, MatchConfig, MsgErrCode} from './types';
+import {DataReceiver, MsgErrCode} from '@game-hosting/match-message-codes';
 import {FinishedState, LobbyState, MatchState} from './state';
+import {MatchConfig} from './config';
 import {Player} from './player';
 import {Team} from './team';
 import {WebSocket} from '@fastify/websocket';

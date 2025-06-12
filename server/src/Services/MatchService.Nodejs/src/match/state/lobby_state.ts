@@ -1,6 +1,6 @@
 import {MatchState, StateName} from './match_state';
 import {ActiveState} from './active_state';
-import {MsgInfoCode} from '../types';
+import {MsgInfoCode} from '@game-hosting/match-message-codes';
 import {Player} from '../player';
 
 export class LobbyState extends MatchState {

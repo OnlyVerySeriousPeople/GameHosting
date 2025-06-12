@@ -1,2 +1,2 @@
 export * from './match';
-export * from './types';
+export * from './config';

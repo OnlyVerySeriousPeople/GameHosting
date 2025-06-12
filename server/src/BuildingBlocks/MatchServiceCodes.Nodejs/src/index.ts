@@ -1,8 +1,3 @@
-export interface MatchConfig {
-  numberOfPlayers: number;
-  numberOfTeams: number;
-}
-
 export enum MsgInfoCode {
   CheckMessage,
   PlayerJoin,
@@ -19,6 +14,11 @@ export enum MsgErrCode {
 export enum DataReceiver {
   All,
   Team,
+}
+
+export enum CloseCode {
+  NormalClosure = 1000,
+  UnsupportedData = 1003,
 }
 
 export enum CustomCloseCode {

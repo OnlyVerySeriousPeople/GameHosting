@@ -1,0 +1,23 @@
+{
+  "name": "@game-hosting/match-message-codes",
+  "version": "0.0.0",
+  "description": "Match service message codes that GameHosting SDK should understand",
+  "exports": {
+    "import": "./build/esm/index.js",
+    "require": "./build/cjs/index.js",
+    "types": "./build/types/index.d.ts"
+  },
+  "scripts": {
+    "build:cjs": "tsc --project ./tsconfig.cjs.json",
+    "build:esm": "tsc --project ./tsconfig.esm.json",
+    "build": "pnpm run build:cjs && pnpm run build:esm",
+    "lint": "eslint 'src/**/*.ts'",
+    "fix": "eslint --fix 'src/**/*.ts'",
+    "setup:cjs": "pnpm install && pnpm run build:cjs",
+    "setup:esm": "pnpm install && pnpm run build:esm"
+  },
+  "devDependencies": {
+    "gts": "^6.0.2",
+    "typescript": "^5.8.3"
+  }
+}

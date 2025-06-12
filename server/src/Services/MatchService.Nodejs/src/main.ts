@@ -1,4 +1,4 @@
-import {CloseCode} from './types';
+import {CloseCode} from '@game-hosting/match-message-codes';
 import {MatchManager} from './match_manager';
 import {env} from 'process';
 import fastify from 'fastify';
