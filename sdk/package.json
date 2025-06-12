@@ -2,13 +2,22 @@
   "name": "@game-hosting/sdk",
   "version": "0.0.0",
   "description": "Simple game SDK for the OVSP GameHosting project",
+  "type": "module",
+  "exports": {
+    "import": "./build/game_hosting.mjs",
+    "types": "./build/types/game_hosting.d.ts"
+  },
   "scripts": {
-    "build": "tsc",
-    "lint": "buf lint && eslint 'src/**/*.ts'",
+    "build": "tsc && node build.mjs",
+    "lint": "eslint 'src/**/*.ts'",
     "fix": "eslint --fix 'src/**/*.ts'",
-    "clean": "rm -rf src/gen tsconfig.tsbuildinfo && gts clean"
+    "postinstall": "pnpm --dir ./node_modules/@game-hosting/match-message-codes run setup:esm"
+  },
+  "dependencies": {
+    "@game-hosting/match-message-codes": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/MatchServiceCodes.Nodejs"
   },
   "devDependencies": {
+    "esbuild": "^0.25.5",
     "gts": "^6.0.2",
     "typescript": "^5.8.3"
   },
