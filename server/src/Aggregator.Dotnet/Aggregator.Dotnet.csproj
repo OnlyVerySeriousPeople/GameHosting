@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Services\AuthService.Dotnet\AuthService.Dotnet.Grpc\Protos\auth.proto" GrpcServices="Client">
+      <Link>Protos\auth.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>
