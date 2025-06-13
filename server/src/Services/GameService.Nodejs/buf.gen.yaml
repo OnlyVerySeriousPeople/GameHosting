@@ -1,0 +1,11 @@
+version: v2
+clean: true
+inputs:
+  - directory: proto
+  - git_repo: 'https://github.com/OnlyVerySeriousPeople/GameHosting.git'
+    branch: kushnir
+    subdir: server/src/Services/LeaderboardService.Nodejs/proto
+plugins:
+  - local: protoc-gen-es
+    out: src/gen/proto
+    opt: target=ts

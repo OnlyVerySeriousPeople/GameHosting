@@ -1,0 +1,48 @@
+services:
+  game_db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks: [net]
+
+  game_service:
+    build: src/Services/GameService.Nodejs
+    ports: ["8080:8080"]
+    depends_on: [game_db]
+    networks: [net]
+
+  leaderboard_db:
+    image: mongo
+    restart: always
+    ports: ["27017:27017"]
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: user
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: db
+    volumes:
+      - mongo_data:/data/db
+    networks: [net]
+
+  leaderboard_service:
+    build: src/Services/LeaderboardService.Nodejs
+    ports: ["8081:8080"]
+    depends_on: [leaderboard_db]
+    networks: [net]
+
+  match_service:
+    build: src/Services/MatchService.Nodejs
+    ports: ["8082:8080"]
+    networks: [net]
+
+volumes:
+  pgdata:
+  mongo_data:
+
+networks:
+  net:

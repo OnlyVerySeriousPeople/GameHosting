@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package leaderboard.v1;
+
+import "google/protobuf/timestamp.proto";
+import "leaderboard/v1/stats.proto";
+
+message Entry {
+  google.protobuf.Timestamp last_updated_at = 1;
+  Stats stats = 2;
+}

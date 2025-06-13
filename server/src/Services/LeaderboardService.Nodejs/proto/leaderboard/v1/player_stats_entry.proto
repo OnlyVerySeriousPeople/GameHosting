@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package leaderboard.v1;
+
+import "leaderboard/v1/entry.proto";
+
+message PlayerStatsEntry {
+  string game_id = 1;
+  Entry entry = 2;
+}

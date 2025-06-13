@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package leaderboard.v1;
+
+import "leaderboard/v1/entry.proto";
+import "leaderboard/v1/leaderboard_entry.proto";
+import "leaderboard/v1/player_stats_entry.proto";
+import "leaderboard/v1/stats.proto";
+
+service LeaderboardService {
+  rpc GetLeaderboard(GetLeaderboardRequest) returns (GetLeaderboardResponse);
+  rpc DeleteLeaderboard(DeleteLeaderboardRequest) returns (DeleteLeaderboardResponse);
+  rpc UpdatePlayerStats(UpdatePlayerStatsRequest) returns (UpdatePlayerStatsResponse);
+  rpc GetPlayerStats(GetPlayerStatsRequest) returns (GetPlayerStatsResponse);
+  rpc GetAllPlayerStats(GetAllPlayerStatsRequest) returns (GetAllPlayerStatsResponse);
+  rpc DeleteAllPlayerStats(DeleteAllPlayerStatsRequest) returns (DeleteAllPlayerStatsResponse);
+}
+
+message GetLeaderboardRequest {
+  string game_id = 1;
+  uint32 entry_limit = 2;
+  optional uint32 score_cursor = 3;
+}
+
+message GetLeaderboardResponse {
+  repeated LeaderboardEntry entries = 1;
+  optional uint32 next_score_cursor = 2;
+}
+
+message DeleteLeaderboardRequest {
+  string game_id = 1;
+}
+
+message DeleteLeaderboardResponse {}
+
+message UpdatePlayerStatsRequest {
+  string game_id = 1;
+  string player_id = 2;
+  Stats stats = 3;
+}
+
+message UpdatePlayerStatsResponse {}
+
+message GetPlayerStatsRequest {
+  string game_id = 1;
+  string player_id = 2;
+}
+
+message GetPlayerStatsResponse {
+  Entry entry = 1;
+}
+
+message GetAllPlayerStatsRequest {
+  string player_id = 1;
+}
+
+message GetAllPlayerStatsResponse {
+  repeated PlayerStatsEntry entries = 1;
+}
+
+message DeleteAllPlayerStatsRequest {
+  string player_id = 1;
+}
+
+message DeleteAllPlayerStatsResponse {}

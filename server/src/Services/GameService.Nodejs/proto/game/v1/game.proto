@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package game.v1;
+
+import "game/v1/game_metadata.proto";
+import "google/protobuf/timestamp.proto";
+
+message Game {
+  string id = 1;
+  string author_id = 2;
+  google.protobuf.Timestamp uploaded_at = 3;
+  uint32 total_plays_count = 4;
+  GameMetadata metadata = 5;
+}

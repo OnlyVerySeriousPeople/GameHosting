@@ -1,0 +1,16 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "module": "Node18",
+    "target": "ES2024",
+    "lib": ["ES2023", "DOM"],
+    "declaration": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "rootDir": "src",
+    "outDir": "build"
+  },
+  "include": ["src/**/*"]
+}

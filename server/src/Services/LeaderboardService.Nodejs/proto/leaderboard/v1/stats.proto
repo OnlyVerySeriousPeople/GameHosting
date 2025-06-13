@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package leaderboard.v1;
+
+import "google/protobuf/struct.proto";
+
+message Stats {
+  uint32 score = 1;
+  google.protobuf.Struct custom = 2;
+}

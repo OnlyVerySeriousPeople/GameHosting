@@ -1,0 +1,17 @@
+{
+  "extends": "./node_modules/gts/",
+  "parserOptions": {
+    "warnOnUnsupportedTypeScriptVersion": false
+  },
+  "rules": {
+    "sort-imports": "warn",
+    "n/no-unpublished-import": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "destructuredArrayIgnorePattern": "^_",
+        "ignoreRestSiblings": true
+      }
+    ]
+  }
+}

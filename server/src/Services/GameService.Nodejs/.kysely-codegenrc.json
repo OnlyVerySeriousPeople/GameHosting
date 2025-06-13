@@ -1,0 +1,7 @@
+{
+  "camelCase": true,
+  "dialect": "postgres",
+  "numericParser": "number",
+  "outFile": "./src/gen/kysely/index.ts",
+  "runtimeEnums": true
+}
