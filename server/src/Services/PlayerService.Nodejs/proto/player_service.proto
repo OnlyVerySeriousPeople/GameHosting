@@ -4,7 +4,6 @@ package players;
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/field_mask.proto";
-import "google/protobuf/struct.proto";
 
 service PlayerService {
   rpc CreatePlayer (CreatePlayerRequest) returns (CreatePlayerResponse);
