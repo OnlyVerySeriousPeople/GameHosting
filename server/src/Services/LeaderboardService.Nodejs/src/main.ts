@@ -6,7 +6,7 @@ import {logger} from '@game-hosting/common/utils';
 import {routes} from './routes';
 
 void (async () => {
-  const server = fastify();
+  const server = fastify({http2: true});
   const db = await Database.connect();
 
   await server.register(fastifyConnectPlugin, {routes: routes(db)});

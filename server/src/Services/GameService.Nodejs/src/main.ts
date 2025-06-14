@@ -6,7 +6,7 @@ import {logger} from '@game-hosting/common/utils';
 import {routes} from './routes';
 
 void (async () => {
-  const server = fastify();
+  const server = fastify({http2: true});
   const db = await Database.connect();
 
   await server.register(fastifyConnectPlugin, {routes: routes(db)});
@@ -19,6 +19,6 @@ void (async () => {
 
   server.listen({host: env.HOST, port: Number(env.PORT)}, (err, addr) => {
     if (err) logger.error(err);
-    else logger.info(`server runnnig at ${addr}`);
+    else logger.info(`server running at ${addr}`);
   });
 })();
