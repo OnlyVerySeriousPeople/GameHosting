@@ -1,7 +1,8 @@
 import mongoose, {connect} from 'mongoose';
 import {DatabaseError} from '@game-hosting/common/errors';
-import {LeaderboardModel} from './models/leaderboard';
+import {LeaderboardModel} from './models/types';
 import {LeaderboardShema} from './schemas/leaderboard';
+import {MongoLeaderboardModel} from './models/leaderboard';
 
 type DatabaseModels = {leaderboard: LeaderboardModel};
 
@@ -18,7 +19,7 @@ class Database {
       await connect(url);
 
       this.models = {
-        leaderboard: new LeaderboardModel(),
+        leaderboard: new MongoLeaderboardModel(),
       };
 
       return this.models;

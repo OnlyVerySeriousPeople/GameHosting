@@ -1,8 +1,9 @@
 import {FilterQuery, Model, model} from 'mongoose';
 import {LeaderboardShema, leaderboardShema} from '../schemas/leaderboard';
 import {HandleError} from '@game-hosting/common/db_model_utils';
+import {LeaderboardModel} from './types';
 
-export class LeaderboardModel {
+export class MongoLeaderboardModel implements LeaderboardModel {
   private readonly model: Model<LeaderboardShema>;
 
   constructor() {
