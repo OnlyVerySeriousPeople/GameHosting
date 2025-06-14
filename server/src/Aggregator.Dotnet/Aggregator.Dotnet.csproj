@@ -19,6 +19,18 @@
     <Protobuf Include="..\Services\AuthService.Dotnet\AuthService.Dotnet.Grpc\Protos\auth.proto" GrpcServices="Client">
       <Link>Protos\auth.proto</Link>
     </Protobuf>
+
+    <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game.proto" GrpcServices="None" AdditionalImportDirs="..\Services\GameService.Nodejs\proto">
+      <Link>Protos\game\v1\game.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game_metadata.proto" GrpcServices="None">
+      <Link>Protos\game\v1\game_metadata.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game_service.proto" GrpcServices="Client" AdditionalImportDirs="..\Services\GameService.Nodejs\proto">
+      <Link>Protos\game\v1\game_service.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>
