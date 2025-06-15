@@ -16,6 +16,10 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@proto/types": ["proto/types/player_service"],
+      "@error-messages/*": ["src/common/constants/error-messages/*"]
+    }
   }
 }
