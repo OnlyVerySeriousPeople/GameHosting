@@ -16,8 +16,10 @@ void (async () => {
   });
 
   server.addHook('onClose', async () => {
-    logger.info('closing database connection...');
+    logger.info('closing opened connections...');
     await Database.disconnect();
+    await Cache.disconnect();
+
     logger.info('shutting down...');
   });
 
