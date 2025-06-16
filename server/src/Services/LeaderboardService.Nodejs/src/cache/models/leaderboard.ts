@@ -18,6 +18,10 @@ export class CachedLeaderboardModel implements LeaderboardModel {
   constructor(
     private readonly client: RedisClientType,
     private readonly realModel: LeaderboardModel,
+    private readonly parser: {
+      parse: <T = unknown>(str: string) => T;
+      stringify: (data: unknown) => string;
+    },
   ) {}
 
   async getLeaderboard(
@@ -28,14 +32,17 @@ export class CachedLeaderboardModel implements LeaderboardModel {
     const key = leaderboardPageCacheKey(gameId, entryLimit, scoreCursor);
 
     const cached = await this.client.get(key);
-    if (cached) return JSON.parse(cached);
+    if (cached)
+      return this.parser.parse<ReturnType<LeaderboardModel['getLeaderboard']>>(
+        cached,
+      );
 
     const data = await this.realModel.getLeaderboard(
       gameId,
       entryLimit,
       scoreCursor,
     );
-    await this.client.set(key, JSON.stringify(data), {
+    await this.client.set(key, this.parser.stringify(data), {
       expiration: {type: 'EX', value: CACHE_TTL},
     });
     return data;
@@ -64,10 +71,13 @@ export class CachedLeaderboardModel implements LeaderboardModel {
     const key = allPlayerStatsCacheKey(playerId);
 
     const cached = await this.client.get(key);
-    if (cached) return JSON.parse(cached);
+    if (cached)
+      return this.parser.parse<
+        ReturnType<LeaderboardModel['getAllPlayerStats']>
+      >(cached);
 
     const data = await this.realModel.getAllPlayerStats(playerId);
-    await this.client.set(key, JSON.stringify(data), {
+    await this.client.set(key, this.parser.stringify(data), {
       expiration: {type: 'EX', value: CACHE_TTL},
     });
     return data;
