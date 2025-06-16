@@ -4,3 +4,5 @@ export const PLAYER_STATS_NOT_FOUND: string =
   'No player statistics found with the provided player ID';
 export const STAT_NOT_FOUND: string =
   'No statistics found with the provided statistic name';
+export const ACHIEVEMENT_NOT_FOUND: string =
+  'No achievement found with the provided player ID/title';
