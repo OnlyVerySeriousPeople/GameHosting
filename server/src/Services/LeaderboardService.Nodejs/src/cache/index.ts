@@ -3,12 +3,14 @@ import {CachedLeaderboardModel} from './models/leaderboard';
 import {DatabaseModels} from '../db';
 import {InternalError} from '@game-hosting/common/errors';
 
-const wrapDatabase =
-  (client: RedisClientType) =>
-  (dbModels: DatabaseModels): DatabaseModels => ({
-    ...dbModels,
-    leaderboard: new CachedLeaderboardModel(client, dbModels.leaderboard),
+const wrapDatabase = async (client: RedisClientType) => {
+  const {default: superjson} = await import('superjson');
+
+  return ({leaderboard, ...rest}: DatabaseModels): DatabaseModels => ({
+    ...rest,
+    leaderboard: new CachedLeaderboardModel(client, leaderboard, superjson),
   });
+};
 
 export class Cache {
   private static client: RedisClientType | null = null;
@@ -17,7 +19,7 @@ export class Cache {
     if (this.client?.isReady) {
       return {
         client: this.client,
-        wrapDatabase: wrapDatabase(this.client),
+        wrapDatabase: await wrapDatabase(this.client),
       };
     }
 
@@ -30,7 +32,7 @@ export class Cache {
 
       return {
         client: this.client,
-        wrapDatabase: wrapDatabase(this.client),
+        wrapDatabase: await wrapDatabase(this.client),
       };
     } catch (err) {
       throw InternalError.from(

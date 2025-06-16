@@ -86,6 +86,9 @@ export class GameModel {
     return await this.db
       .selectFrom('game')
       .selectAll()
+      .select(eb =>
+        sql<GameCategory[]>`${eb.ref('categories')}::text[]`.as('categories'),
+      )
       .where(filter)
       .offset(offset)
       .limit(limit)
@@ -97,7 +100,14 @@ export class GameModel {
   }
 
   static byCategories(categories: GameCategory[]): GameFilter {
-    return eb => eb('categories', '@>', categories);
+    return eb =>
+      eb(
+        'categories',
+        '@>',
+        sql<
+          GameCategory[]
+        >`array[${sql.join(categories, sql`, `)}]::game_category[]`,
+      );
   }
 
   static byAuthor(authorId: string): GameFilter {

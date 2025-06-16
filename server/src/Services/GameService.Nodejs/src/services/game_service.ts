@@ -6,20 +6,22 @@ import {
   plainObj,
 } from '@game-hosting/common/dto_validators';
 import {DatabaseModels, GameFilter, GameModel} from '../db';
+import {GrpcClients, LeaderboardClient} from '../grpc_clients';
 import {
   HandleError,
   LogEndpoint,
 } from '@game-hosting/common/grpc_service_utils';
 import {RequestError} from '@game-hosting/common/errors';
 import {create} from '@bufbuild/protobuf';
-import {leaderboardClient} from '../grpc_clients/leaderboard_client';
 import {toGameDto} from '../dtos/game';
 
 export class GameService {
   private readonly model: GameModel;
+  private readonly leaderboardClient: LeaderboardClient;
 
-  constructor({game}: DatabaseModels) {
+  constructor({game}: DatabaseModels, {leaderboardClient}: GrpcClients) {
     this.model = game;
+    this.leaderboardClient = leaderboardClient;
   }
 
   @LogEndpoint('CreateGame')
@@ -86,7 +88,7 @@ export class GameService {
   }: proto.DeleteGameRequest): Promise<proto.DeleteGameResponse> {
     await this.model.deleteGame(gameId);
 
-    await leaderboardClient.deleteLeaderboard(
+    await this.leaderboardClient.deleteLeaderboard(
       create(proto.DeleteLeaderboardRequestSchema, {gameId}),
     );
 
