@@ -5,6 +5,7 @@ import { status } from '@grpc/grpc-js';
 import { DomainNotFoundError } from '../exceptions/not-found.error';
 import { Prisma } from '@prisma/client';
 import { DomainInvalidArgumentError } from '../exceptions/invalid-argument.error';
+import { throwError } from 'rxjs';
 
 @Catch(Error)
 export class RpcExceptionFilter implements ExceptionFilter {
@@ -22,15 +23,18 @@ export class RpcExceptionFilter implements ExceptionFilter {
 
   catch(exception: Error) {
     if (exception instanceof DomainException) {
-      throw new RpcException(this.domainErrorToRpc(exception));
+      throwError(() => new RpcException(this.domainErrorToRpc(exception)));
     }
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
-      throw new RpcException(this.prismaErrorToRpc(exception));
+      throwError(() => new RpcException(this.prismaErrorToRpc(exception)));
     }
-    throw new RpcException({
-      message: exception.message,
-      code: status.UNKNOWN,
-    });
+    return throwError(
+      () =>
+        new RpcException({
+          message: exception.message,
+          code: status.UNKNOWN,
+        }),
+    );
   }
 
   private domainErrorToRpc(ex: DomainException) {

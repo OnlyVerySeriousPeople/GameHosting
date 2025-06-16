@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseFilters} from '@nestjs/common';
 import { PlayersService } from './players.service';
 import {
   CreatePlayerRequest,
@@ -13,7 +13,9 @@ import {
   UpdatePlayerRequest,
   UpdatePlayerResponse,
 } from '@proto/types';
+import { RpcExceptionFilter } from '../../common/filters/rpc-exception.filter';
 
+@UseFilters(RpcExceptionFilter)
 @Controller()
 @PlayerServiceControllerMethods()
 export class PlayersController implements PlayerServiceController {

@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { PLAYERS_PACKAGE_NAME } from '@proto/types';
-import { RpcExceptionFilter } from './common/filters/rpc-exception.filter';
 import { join } from 'path';
 
 async function bootstrap() {
@@ -16,8 +15,6 @@ async function bootstrap() {
       url: 'localhost:50051',
     },
   });
-
-  app.useGlobalFilters(new RpcExceptionFilter());
 
   await app.startAllMicroservices();
 }
