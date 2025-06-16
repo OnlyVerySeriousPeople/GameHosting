@@ -7,14 +7,14 @@ import {
 } from '@game-hosting/common/dto_validators';
 import {DatabaseModels, LeaderboardModel} from '../db';
 import {
+  HandleError,
+  LogEndpoint,
+} from '@game-hosting/common/grpc_service_utils';
+import {
   toEntryDto,
   toLeaderboardEntryDto,
   toPlayerStatsEntryDto,
 } from '../dtos/leaderboard';
-import {
-  HandleError,
-  LogEndpoint,
-} from '@game-hosting/common/grpc_service_utils';
 import {create} from '@bufbuild/protobuf';
 
 export class LeaderboardService {
