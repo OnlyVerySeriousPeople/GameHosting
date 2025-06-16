@@ -40,4 +40,8 @@ export class PlayersRepository {
       where: input.id ? { id: input.id } : { username: input.username },
     });
   }
+
+  async withTransaction<T>(callback: (db: typeof this.database) => Promise<T>) {
+    return this.database.$transaction(callback);
+  }
 }

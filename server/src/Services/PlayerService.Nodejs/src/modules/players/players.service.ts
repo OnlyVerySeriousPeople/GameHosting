@@ -15,18 +15,36 @@ import { simplifyFieldMaskInUpdateInput } from '../../common/utils/update-input-
 import { PlayersRepository } from './players.repository';
 import { PLAYER_NOT_FOUND } from '@error-messages/db-error-messages.constants';
 import { INVALID_UPDATE_MASK } from '@error-messages/input-error-messages.constants';
+import { PlayerStatisticsService } from '../player-statistics/player-statistics.service';
 import { ThrowIf } from '../../common/utils/throw-if.util';
 
 @Injectable()
 export class PlayersService {
-  constructor(private readonly playersRepository: PlayersRepository) {}
+  constructor(
+    private readonly playersRepository: PlayersRepository,
+    private readonly playerStatisticsService: PlayerStatisticsService,
+  ) {}
 
   async createPlayer(
     createPlayerInput: CreatePlayerRequest,
   ): Promise<CreatePlayerResponse> {
-    return {
-      player: await this.playersRepository.create(createPlayerInput),
-    };
+    const player = await this.playersRepository.withTransaction(async (db) => {
+      const newPlayer = await db.player.create({
+        data: {
+          username: createPlayerInput.username,
+          email: createPlayerInput.email,
+        },
+      });
+
+      await this.playerStatisticsService.createPlayerStatistics(
+        newPlayer.id,
+        db,
+      );
+
+      return newPlayer;
+    });
+
+    return { player };
   }
 
   async getPlayer(
