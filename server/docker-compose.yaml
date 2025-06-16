@@ -1,7 +1,6 @@
 services:
   game_db:
     image: postgres
-    restart: always
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -19,7 +18,6 @@ services:
 
   leaderboard_db:
     image: mongo
-    restart: always
     ports: ["27017:27017"]
     environment:
       MONGO_INITDB_ROOT_USERNAME: user
@@ -27,6 +25,12 @@ services:
       MONGO_INITDB_DATABASE: db
     volumes:
       - mongo_data:/data/db
+    networks: [net]
+
+  leaderboard_cache:
+    image: redis
+    command: redis-server --requirepass "password"
+    ports: ["6379:6379"]
     networks: [net]
 
   leaderboard_service:
