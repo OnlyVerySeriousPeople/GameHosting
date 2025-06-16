@@ -31,6 +31,27 @@
     <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game_service.proto" GrpcServices="Client" AdditionalImportDirs="..\Services\GameService.Nodejs\proto">
       <Link>Protos\game\v1\game_service.proto</Link>
     </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\leaderboard_service.proto" GrpcServices="Client" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\leaderboard_service.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\entry.proto" GrpcServices="None" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\entry.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\leaderboard_entry.proto" GrpcServices="None" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\leaderboard_entry.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\player_stats_entry.proto" GrpcServices="None" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\player_stats_entry.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\stats.proto" GrpcServices="None">
+      <Link>Protos\leaderboard\v1\stats.proto</Link>
+    </Protobuf>
+
   </ItemGroup>
 
 </Project>
