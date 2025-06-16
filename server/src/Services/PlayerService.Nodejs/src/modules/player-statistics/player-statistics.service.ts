@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import {
   GetPlayerStatisticsRequest,
   GetPlayerStatisticsResponse,
@@ -11,10 +11,15 @@ import {
 import { PlayerStatisticsRepository } from './player-statistics.repository';
 import { Prisma } from '@prisma/client';
 import { ThrowIf } from '../../common/utils/throw-if.util';
+import { PlayerAchievementsService } from '../player-achievements/player-achievements.service';
 
 @Injectable()
 export class PlayerStatisticsService {
-  constructor(private readonly repository: PlayerStatisticsRepository) {}
+  constructor(
+    private readonly repository: PlayerStatisticsRepository,
+    @Inject(forwardRef(() => PlayerAchievementsService))
+    private readonly playerAchievementsService: PlayerAchievementsService,
+  ) {}
 
   async updatePlayerStatistic(updateStatisticInput: UpdatePlayerStatisticDto) {
     const { playerId, statTarget, operation, value } = updateStatisticInput;
@@ -30,6 +35,11 @@ export class PlayerStatisticsService {
       operation === 'increment' ? currentValue + value : currentValue - value;
 
     await this.repository.updateStat(playerId, stat, updatedValue);
+    await this.playerAchievementsService.handleStatisticsUpdate({
+      playerId,
+      stat,
+      updatedValue,
+    });
   }
 
   async createPlayerStatistics(
