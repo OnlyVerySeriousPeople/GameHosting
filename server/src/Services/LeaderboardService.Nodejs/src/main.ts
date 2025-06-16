@@ -1,3 +1,4 @@
+import {Cache} from './cache';
 import {Database} from './db';
 import {env} from 'process';
 import fastify from 'fastify';
@@ -8,8 +9,11 @@ import {routes} from './routes';
 void (async () => {
   const server = fastify({http2: true});
   const db = await Database.connect();
+  const cache = await Cache.connect();
 
-  await server.register(fastifyConnectPlugin, {routes: routes(db)});
+  await server.register(fastifyConnectPlugin, {
+    routes: routes(cache.wrapDatabase(db)),
+  });
 
   server.addHook('onClose', async () => {
     logger.info('closing database connection...');
