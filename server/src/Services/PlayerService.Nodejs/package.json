@@ -16,7 +16,11 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
-    "proto:gen": "npx protoc --ts_proto_opt=nestJs=true,useDate=true --proto_path=./proto ./proto/*.proto --ts_proto_out=./proto/types"
+    "proto:gen": "npx protoc --ts_proto_opt=nestJs=true,useDate=true --proto_path=./proto ./proto/*.proto --ts_proto_out=./proto/types",
+    "db:seed": "npx prisma db seed"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
