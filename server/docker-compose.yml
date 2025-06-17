@@ -76,6 +76,13 @@ services:
       - mongo_data:/data/db
     networks: [net]
 
+  leaderboard_cache:
+    image: redis
+    command: redis-server --requirepass "password"
+    ports: ["6380:6379"]
+    networks: [net]
+
+
   leaderboard_service:
     build: src/Services/LeaderboardService.Nodejs
     ports: ["8081:8080"]

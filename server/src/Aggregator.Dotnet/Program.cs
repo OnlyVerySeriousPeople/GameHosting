@@ -10,5 +10,6 @@ var app = builder.Build();
 
 app.MapAuthEndpoints();
 app.MapGameEndpoints();
+app.MapLeaderboardEndpoints();
 
 app.Run();
