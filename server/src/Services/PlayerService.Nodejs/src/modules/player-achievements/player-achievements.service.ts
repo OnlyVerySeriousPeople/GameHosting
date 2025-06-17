@@ -72,7 +72,7 @@ export class PlayerAchievementsService {
     return { playerAchievements };
   }
 
-  async giveAchievementToPlayer(achievementId: number, playerId: number) {
+  async giveAchievementToPlayer(playerId: number, achievementId: number) {
     const existing = await this.repository.findPlayerAchievement(
       playerId,
       achievementId,
@@ -93,8 +93,8 @@ export class PlayerAchievementsService {
 
     for (const achievement of achievements) {
       const satisfied = applyOperatorToNumbers(
-        achievement.threshold,
         payload.updatedValue,
+        achievement.threshold,
         achievement.operator as MathOperator,
       );
       if (satisfied) {
