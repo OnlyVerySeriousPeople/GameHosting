@@ -53,16 +53,30 @@ namespace Aggregator.Dotnet.Mappings
 				Metadata = dto.Metadata.ToGrpc()
 			};
 
-		public static GetGamesRequest ToGrpc(this GetGamesRequestDto dto) =>
-			new GetGamesRequest
+		public static GetGamesRequest ToGrpc(this GetGamesRequestDto dto)
+		{
+			var request = new GetGamesRequest
 			{
-				Name = dto.FiltersBy.Name,
-				UseCategories = dto.FiltersBy.UseCategories,
-				AuthorId = dto.FiltersBy.AuthorId,
-				Categories = { dto.Categories },
 				Offset = dto.Offset,
-				Limit = dto.Limit,
+				Limit = dto.Limit
 			};
+
+			if (dto.FiltersBy.UseCategories == true)
+			{
+				request.UseCategories = true;
+				request.Categories.AddRange(dto.Categories ?? []);
+			}
+			else if (!string.IsNullOrEmpty(dto.FiltersBy.AuthorId))
+			{
+				request.AuthorId = dto.FiltersBy.AuthorId;
+			}
+			else if (!string.IsNullOrEmpty(dto.FiltersBy.Name))
+			{
+				request.Name = dto.FiltersBy.Name;
+			}
+
+			return request;
+		}
 
 		public static GetLeaderboardRequest ToGrpc(this GetLeaderboardRequestDto dto) =>
 			new GetLeaderboardRequest
@@ -109,6 +123,7 @@ namespace Aggregator.Dotnet.Mappings
 			{
 				s.Fields[kvp.Key] = ToValue(kvp.Value);
 			}
+
 			return s;
 		}
 
