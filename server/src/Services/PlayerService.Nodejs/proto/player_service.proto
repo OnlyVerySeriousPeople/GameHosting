@@ -43,15 +43,6 @@ message Player {
   google.protobuf.Timestamp updated_at = 5;
 }
 
-message PlayerExpanded {
-  int32 id = 1;
-  string username = 2;
-  string email = 3;
-  PlayerStatistics statistics = 4;
-  repeated PlayerAchievement achievements = 5;
-  repeated FeaturedGame featuredGames = 6;
-}
-
 message UpdatePlayerInput {
   int32 id = 1;
   string username = 2;
@@ -68,7 +59,6 @@ message GetPlayerRequest {
     int32 id = 1;
     string username = 2;
   }
-  bool expanded = 3;
 }
 
 message GetAllPlayersRequest {}
@@ -90,10 +80,7 @@ message CreatePlayerResponse {
 }
 
 message GetPlayerResponse {
-  oneof player_form {
-    Player player = 1;
-    PlayerExpanded player_expanded = 2;
-  }
+  Player player = 1;
 }
 
 message UpdatePlayerResponse {

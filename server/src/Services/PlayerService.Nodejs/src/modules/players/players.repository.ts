@@ -11,16 +11,9 @@ export class PlayersRepository {
     return this.database.player.create({ data });
   }
 
-  async findUnique(input: IdOrUsername, expanded = false) {
+  async findUnique(input: IdOrUsername) {
     return this.database.player.findUnique({
       where: input.id ? { id: input.id } : { username: input.username },
-      include: expanded
-        ? {
-            statistics: true,
-            achievements: { include: { achievement: true } },
-            featuredGames: true,
-          }
-        : undefined,
     });
   }
 

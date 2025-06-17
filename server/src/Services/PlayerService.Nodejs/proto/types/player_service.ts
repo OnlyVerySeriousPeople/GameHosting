@@ -19,15 +19,6 @@ export interface Player {
   updatedAt: Date | undefined;
 }
 
-export interface PlayerExpanded {
-  id: number;
-  username: string;
-  email: string;
-  statistics: PlayerStatistics | undefined;
-  achievements: PlayerAchievement[];
-  featuredGames: FeaturedGame[];
-}
-
 export interface UpdatePlayerInput {
   id: number;
   username: string;
@@ -42,7 +33,6 @@ export interface CreatePlayerRequest {
 export interface GetPlayerRequest {
   id?: number | undefined;
   username?: string | undefined;
-  expanded: boolean;
 }
 
 export interface GetAllPlayersRequest {
@@ -63,8 +53,7 @@ export interface CreatePlayerResponse {
 }
 
 export interface GetPlayerResponse {
-  player?: Player | undefined;
-  playerExpanded?: PlayerExpanded | undefined;
+  player: Player | undefined;
 }
 
 export interface UpdatePlayerResponse {

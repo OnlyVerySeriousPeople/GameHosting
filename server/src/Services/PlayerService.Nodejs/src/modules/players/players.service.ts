@@ -50,13 +50,9 @@ export class PlayersService {
   async getPlayer(
     getPlayerInput: GetPlayerRequest,
   ): Promise<GetPlayerResponse> {
-    const player = await this.playersRepository.findUnique(
-      getPlayerInput,
-      getPlayerInput.expanded,
-    );
+    const player = await this.playersRepository.findUnique(getPlayerInput);
 
     ThrowIf.notFound(player, PLAYER_NOT_FOUND);
-
     return { player };
   }
 
