@@ -4,15 +4,15 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>4b0228c1-dbad-4571-88ee-c463d93f44ea</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Services\AuthService.Dotnet\AuthService.Dotnet.Grpc\AuthService.Dotnet.Grpc.csproj" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
   </ItemGroup>
 
   <ItemGroup>

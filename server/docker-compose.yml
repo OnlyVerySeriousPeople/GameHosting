@@ -34,6 +34,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=5050
       - ConnectionStrings__Postgres=Server=authDb;Port=5432;Database=authDb;User Id=postgres;Password=postgres;IncludeErrorDetail=true
       - ConnectionStrings__Redis=authCache:6379
+      - Gateway__Url=http://localhost:5000
     container_name: authService
     ports:
       - "5050:5050"
@@ -93,6 +94,31 @@ services:
     build: src/Services/MatchService.Nodejs
     ports: ["8082:8080"]
     networks: [net]
+
+  aggregator: 
+    image: aggregator
+    build:
+      context: .
+      dockerfile: src/Aggregator.Dotnet/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - GrpcSettings__AuthServiceUrl=http://authService:5050
+      - GrpcSettings__GameServiceUrl=http://game_service:8080
+      - GrpcSettings__LeaderboardServiceUrl=http://leaderboard_service:8080
+    container_name: aggregator
+    ports:
+      - "5000:5000"
+    depends_on:
+      - authService
+      - game_service
+      - leaderboard_service
+      - match_service
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+       - net
 
 networks:
   net:
