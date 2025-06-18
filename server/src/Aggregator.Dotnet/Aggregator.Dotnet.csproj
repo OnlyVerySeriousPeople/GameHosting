@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>4b0228c1-dbad-4571-88ee-c463d93f44ea</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="..\Services\AuthService.Dotnet\AuthService.Dotnet.Grpc\Protos\auth.proto" GrpcServices="Client">
+      <Link>Protos\auth.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game.proto" GrpcServices="None" AdditionalImportDirs="..\Services\GameService.Nodejs\proto">
+      <Link>Protos\game\v1\game.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game_metadata.proto" GrpcServices="None">
+      <Link>Protos\game\v1\game_metadata.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\GameService.Nodejs\proto\game\v1\game_service.proto" GrpcServices="Client" AdditionalImportDirs="..\Services\GameService.Nodejs\proto">
+      <Link>Protos\game\v1\game_service.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\leaderboard_service.proto" GrpcServices="Client" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\leaderboard_service.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\entry.proto" GrpcServices="None" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\entry.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\leaderboard_entry.proto" GrpcServices="None" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\leaderboard_entry.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\player_stats_entry.proto" GrpcServices="None" AdditionalImportDirs="..\Services\LeaderboardService.Nodejs\proto">
+      <Link>Protos\leaderboard\v1\player_stats_entry.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="..\Services\LeaderboardService.Nodejs\proto\leaderboard\v1\stats.proto" GrpcServices="None">
+      <Link>Protos\leaderboard\v1\stats.proto</Link>
+    </Protobuf>
+
+  </ItemGroup>
+
+</Project>

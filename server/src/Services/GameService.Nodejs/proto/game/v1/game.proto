@@ -5,6 +5,8 @@ package game.v1;
 import "game/v1/game_metadata.proto";
 import "google/protobuf/timestamp.proto";
 
+option csharp_namespace = "Game.V1";
+
 message Game {
   string id = 1;
   string author_id = 2;
