@@ -1,26 +1,23 @@
-import { DomainNotFoundError } from '../exceptions/not-found.error';
-import { DomainInvalidArgumentError } from '../exceptions/invalid-argument.error';
+import { NotFoundExceptionCreator } from '../exceptions/factories/not-found-ex-creator';
+import { InvalidArgumentExceptionCreator } from '../exceptions/factories/invalid-argument-ex-creator';
 
 export class ThrowIf {
-  private static checkValue(value: any) {
-    return value === null || value === undefined;
-  }
+  private static notFoundCreator: NotFoundExceptionCreator =
+    new NotFoundExceptionCreator();
+  private static invalidArgumentCreator: InvalidArgumentExceptionCreator =
+    new InvalidArgumentExceptionCreator();
 
   static notFound<T>(
     value: T,
     message: string,
   ): asserts value is NonNullable<T> {
-    if (this.checkValue(value)) {
-      throw new DomainNotFoundError(message);
-    }
+    this.notFoundCreator.throwIfNull(value, message);
   }
 
   static invalidArgument<T>(
     value: T,
     message: string,
   ): asserts value is NonNullable<T> {
-    if (this.checkValue(value)) {
-      throw new DomainInvalidArgumentError(message);
-    }
+    this.invalidArgumentCreator.throwIfNull(value, message);
   }
 }
