@@ -22,7 +22,7 @@
     "@connectrpc/connect-fastify": "^2.0.2",
     "@connectrpc/connect-node": "^2.0.2",
     "@dotenvx/dotenvx": "^1.44.1",
-    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs",
+    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#path:/server/src/BuildingBlocks/Common.Nodejs",
     "fastify": "^5.3.3",
     "kysely": "^0.28.2",
     "pg": "^8.16.0",

@@ -20,7 +20,7 @@
     "@connectrpc/connect": "^2.0.2",
     "@connectrpc/connect-fastify": "^2.0.2",
     "@dotenvx/dotenvx": "^1.44.1",
-    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs",
+    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#path:/server/src/BuildingBlocks/Common.Nodejs",
     "fastify": "^5.3.3",
     "mongoose": "^8.15.1",
     "pino": "^9.7.0",

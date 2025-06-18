@@ -16,8 +16,8 @@
   "dependencies": {
     "@dotenvx/dotenvx": "^1.44.2",
     "@fastify/websocket": "^11.1.0",
-    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/Common.Nodejs",
-    "@game-hosting/match-message-codes": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/MatchServiceCodes.Nodejs",
+    "@game-hosting/common": "github:OnlyVerySeriousPeople/GameHosting#path:/server/src/BuildingBlocks/Common.Nodejs",
+    "@game-hosting/match-message-codes": "github:OnlyVerySeriousPeople/GameHosting#path:/server/src/BuildingBlocks/MatchServiceCodes.Nodejs",
     "fastify": "^5.3.3"
   },
   "devDependencies": {

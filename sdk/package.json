@@ -14,7 +14,7 @@
     "postinstall": "pnpm --dir ./node_modules/@game-hosting/match-message-codes run setup:esm"
   },
   "dependencies": {
-    "@game-hosting/match-message-codes": "github:OnlyVerySeriousPeople/GameHosting#kushnir&path:/server/src/BuildingBlocks/MatchServiceCodes.Nodejs"
+    "@game-hosting/match-message-codes": "github:OnlyVerySeriousPeople/GameHosting#path:/server/src/BuildingBlocks/MatchServiceCodes.Nodejs"
   },
   "devDependencies": {
     "esbuild": "^0.25.5",
