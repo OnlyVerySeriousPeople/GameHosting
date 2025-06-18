@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Player {
+  id            Int                 @id @default(autoincrement())
+  username      String              @unique
+  email         String              @unique
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  statistics    PlayerStatistics?
+  achievements  PlayerAchievement[]
+  featuredGames FeaturedGame[]
+}
+
+model PlayerStatistics {
+  id               Int    @id @default(autoincrement())
+  playerId         Int    @unique
+  player           Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  totalGamesPlayed Int    @default(0)
+  completedGames   Int    @default(0)
+}
+
+model Achievement {
+  id          Int                 @id @default(autoincrement())
+  players     PlayerAchievement[]
+  title       String              @unique
+  description String
+  statTarget  String
+  operator    String
+  threshold   Float
+}
+
+model PlayerAchievement {
+  playerId      Int
+  achievementId Int
+  achievedAt    DateTime    @default(now())
+  player        Player      @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+
+  @@id([playerId, achievementId])
+}
+
+model FeaturedGame {
+  id       Int    @id @default(autoincrement())
+  gameId   Int
+  playerId Int
+  player   Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}

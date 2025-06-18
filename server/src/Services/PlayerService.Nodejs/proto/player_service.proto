@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+package players;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/field_mask.proto";
+
+service PlayerService {
+  rpc CreatePlayer (CreatePlayerRequest) returns (CreatePlayerResponse);
+  rpc GetPlayer (GetPlayerRequest) returns (GetPlayerResponse);
+  rpc GetAllPlayers (GetAllPlayersRequest) returns (GetAllPlayersResponse);
+  rpc UpdatePlayer (UpdatePlayerRequest) returns (UpdatePlayerResponse);
+  rpc DeletePlayer (DeletePlayerRequest) returns (DeletePlayerResponse);
+}
+
+service PlayerStatisticsService {
+  rpc GetPlayerStatistics (GetPlayerStatisticsRequest) returns (GetPlayerStatisticsResponse);
+}
+
+service PlayerAchievementService {
+  rpc GetPlayerAchievementProgress (GetPlayerAchievementProgressRequest) returns (GetPlayerAchievementProgressResponse);
+  rpc GetPlayerAllAchievements (GetAllPlayerAchievementsRequest) returns (GetAllPlayerAchievementsResponse);
+}
+
+service AchievementService {
+  rpc GetAchievementById (GetAchievementByIdRequest) returns (GetAchievementResponse);
+  rpc GetAchievementByTitle (GetAchievementByTitleRequest) returns (GetAchievementResponse);
+  rpc GetAllAchievements (GetAllAchievementsRequest) returns (GetAllAchievementsResponse);
+}
+
+service FeaturedGameService {
+  rpc AddGameToFeatured (AddGameToFeaturedRequest) returns (AddGameToFeaturedResponse);
+  rpc GetAllFeaturedGamesOfPlayer (GetAllFeaturedGamesOfPlayerRequest) returns (GetAllFeaturedGamesOfPlayerResponse);
+}
+
+// Player
+
+message Player {
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+  google.protobuf.Timestamp created_at = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message UpdatePlayerInput {
+  int32 id = 1;
+  string username = 2;
+  string email = 3;
+}
+
+message CreatePlayerRequest {
+  string username = 1;
+  string email = 2;
+}
+
+message GetPlayerRequest {
+  oneof player_identifier {
+    int32 id = 1;
+    string username = 2;
+  }
+}
+
+message GetAllPlayersRequest {}
+
+message UpdatePlayerRequest {
+  UpdatePlayerInput player = 1;
+  google.protobuf.FieldMask update_mask = 2;
+}
+
+message DeletePlayerRequest {
+  oneof player_identifier {
+    int32 id = 1;
+    string username = 2;
+  }
+}
+
+message CreatePlayerResponse {
+  Player player = 1;
+}
+
+message GetPlayerResponse {
+  Player player = 1;
+}
+
+message UpdatePlayerResponse {
+  Player player = 1;
+}
+
+message DeletePlayerResponse {
+  bool success = 1;
+}
+
+message GetAllPlayersResponse {
+  repeated Player players = 1;
+}
+
+// PlayerStatistics
+
+message PlayerStatistics {
+  int32 id = 1;
+  int32 player_id = 2;
+  int32 total_games_played = 3;
+  int32 completed_games = 4;
+}
+
+message GetPlayerStatisticsRequest {
+  int32 player_id = 1;
+}
+
+message GetPlayerStatisticsResponse {
+  PlayerStatistics player_statistics = 1;
+}
+
+// PlayerAchievement
+
+message PlayerAchievement {
+  int32 id = 1;
+  int32 player_id = 2;
+  string title = 3;
+  string description = 4;
+  google.protobuf.Timestamp achieved_at = 5;
+}
+
+message GetPlayerAchievementProgressRequest {
+  int32 player_id = 1;
+  int32 achievement_id = 2;
+}
+
+message GetPlayerAchievementProgressResponse {
+  int32 current = 1;
+  int32 required = 2;
+}
+
+message GetAllPlayerAchievementsRequest {
+  int32 player_id = 1;
+}
+
+message GetAllPlayerAchievementsResponse {
+  repeated PlayerAchievement player_achievements = 1;
+}
+
+// Achievement
+
+message Achievement {
+  int32 id = 1;
+  string title = 2;
+  string description = 3;
+  string stat_target = 4;
+  string operator = 5;
+  float threshold = 6;
+}
+
+message GetAchievementByIdRequest {
+  int32 id = 1;
+}
+
+message GetAchievementByTitleRequest {
+  string title = 1;
+}
+
+message GetAchievementResponse {
+  Achievement achievement = 1;
+}
+
+message GetAllAchievementsRequest {}
+
+message GetAllAchievementsResponse {
+  repeated Achievement achievements = 1;
+}
+
+// FeaturedGame
+
+message FeaturedGame {
+  int32 player_id = 1;
+  int32 game_id = 2;
+}
+
+message AddGameToFeaturedRequest {
+  int32 player_id = 1;
+  int32 game_id = 2;
+}
+
+message AddGameToFeaturedResponse {
+  bool success = 1;
+}
+
+message GetAllFeaturedGamesOfPlayerRequest {
+  int32 player_id = 1;
+}
+
+message GetAllFeaturedGamesOfPlayerResponse {
+  repeated int32 game_ids = 1;
+}
