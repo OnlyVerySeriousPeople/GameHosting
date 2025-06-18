@@ -1,55 +1,24 @@
 import { Catch, ExceptionFilter } from '@nestjs/common';
-import { DomainException } from '../exceptions/domain-exception';
-import { RpcException } from '@nestjs/microservices';
-import { status } from '@grpc/grpc-js';
-import { DomainNotFoundError } from '../exceptions/not-found.error';
-import { Prisma } from '@prisma/client';
-import { DomainInvalidArgumentError } from '../exceptions/invalid-argument.error';
-import { throwError } from 'rxjs';
+import { DomainExceptionHandler } from './handlers/domain-exception.handler';
+import { PrismaExceptionHandler } from './handlers/prisma-exception.handler';
+import { DefaultExceptionHandler } from './handlers/default-exception.handler';
+import { AbstractExceptionHandler } from './handlers/abstract-handler';
 
 @Catch(Error)
 export class RpcExceptionFilter implements ExceptionFilter {
-  private domainErrorRpcCodeMap = new Map([
-    [DomainNotFoundError, status.NOT_FOUND],
-    [DomainInvalidArgumentError, status.INVALID_ARGUMENT],
-  ]);
+  private handlerChain: AbstractExceptionHandler;
 
-  private prismaErrorRpcCodeMap: { [key: string]: status } = {
-    P2002: status.ALREADY_EXISTS,
-    P2003: status.FAILED_PRECONDITION,
-    P2000: status.INVALID_ARGUMENT,
-    P2025: status.NOT_FOUND,
-  };
+  constructor() {
+    const domainHandler = new DomainExceptionHandler();
+    const prismaHandler = new PrismaExceptionHandler();
+    const defaultHandler = new DefaultExceptionHandler();
+
+    domainHandler.setNext(prismaHandler).setNext(defaultHandler);
+
+    this.handlerChain = domainHandler;
+  }
 
   catch(exception: Error) {
-    if (exception instanceof DomainException) {
-      throwError(() => new RpcException(this.domainErrorToRpc(exception)));
-    }
-    if (exception instanceof Prisma.PrismaClientKnownRequestError) {
-      throwError(() => new RpcException(this.prismaErrorToRpc(exception)));
-    }
-    return throwError(
-      () =>
-        new RpcException({
-          message: exception.message,
-          code: status.UNKNOWN,
-        }),
-    );
-  }
-
-  private domainErrorToRpc(ex: DomainException) {
-    for (const [ErrorClass, grpcCode] of this.domainErrorRpcCodeMap.entries()) {
-      if (ex instanceof ErrorClass) {
-        return { message: ex.message, code: grpcCode };
-      }
-    }
-    return { message: ex.message, code: status.UNKNOWN };
-  }
-
-  private prismaErrorToRpc(ex: Prisma.PrismaClientKnownRequestError) {
-    return {
-      message: ex.message,
-      code: this.prismaErrorRpcCodeMap[ex.code] ?? status.INTERNAL,
-    };
+    return this.handlerChain.handle(exception);
   }
 }
